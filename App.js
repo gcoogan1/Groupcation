@@ -16,6 +16,7 @@ import InlineButton from "./src/components/InlineButton/InlineButton";
 import ActionButtons from "./src/components/ActionButtons/ActionButtons";
 import EmptyState from "./src/components/EmptyState/EmptyState";
 import Avatar from "./src/components/Avatar/Avatar";
+import AvatarStack from "./src/components/AvatarStack/AvatarStack";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -27,11 +28,39 @@ export default function App() {
     return null;
   }
 
+  const usersInTrip = [
+    {
+      // image: 'https://i.pinimg.com/564x/d3/05/d6/d305d6b4957713e981c43d381c12b862.jpg',
+      initials: 'gc',
+      userId: '123'
+    },
+    {
+      image: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/440px-Patrick_Star.svg.png',
+      initials: 'hb',
+      userId: '456'
+    },
+    // {
+    //   image: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/600px-SpongeBob_SquarePants_character.svg.png?20231203073904',
+    //   initials: 'pv',
+    //   userId: '789'
+    // },
+    // {
+    //   image: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a0/Sandy_Cheeks.svg/440px-Sandy_Cheeks.svg.png',
+    //   initials: 'ja',
+    //   userId: '999'
+    // },
+    // {
+    //   image: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a0/Sandy_Cheeks.svg/440px-Sandy_Cheeks.svg.png',
+    //   initials: 'ja',
+    //   userId: '900'
+    // }
+  ]
+
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      <Avatar avatarImage={require('./assets/imagery/DefaultAvatar.png')} size="2xl" initials={'gc'} />
+     <AvatarStack users={usersInTrip} size={'md'} />
     </View>
   );
 }

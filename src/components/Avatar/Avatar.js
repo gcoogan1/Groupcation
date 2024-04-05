@@ -24,7 +24,7 @@ const Avatar = ({ avatarImage, size, initials, numOfUsers }) => {
 
   return (
     <>
-      {!!avatarImage.uri  ? (
+      {!!avatarImage?.uri  ? (
         <Image
           source={avatarImage}
           style={[

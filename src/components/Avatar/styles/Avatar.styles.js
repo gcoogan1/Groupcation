@@ -6,7 +6,7 @@ export const avatarStyles = StyleSheet.create({
     ...theme.border.radius.full,
     ...theme.border.width.lg,
     borderColor: theme.color.surface.base,
-    backgroundColor: theme.color.disabled.base
+    backgroundColor: theme.color.disabled.base,
   },
   initialsContainer: {
     ...theme.border.radius.full,
