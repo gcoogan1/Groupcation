@@ -1,12 +1,5 @@
-import { StatusBar } from "expo-status-bar";
 import {
-  Alert,
-  Pressable,
-  ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
 } from "react-native";
 import {
   useFonts,
@@ -15,18 +8,11 @@ import {
 } from "@expo-google-fonts/rubik";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
-import { useForm } from "react-hook-form";
+
+import AuthContextProvider, { AuthContext } from "./src/state/authContext";
 import Onboarding from "./src/screens/UnAuth/Onboarding/Onboarding";
 import TestScreen from "./src/screens/TestScreen";
 import { theme } from "./src/styles/theme";
-import Icon from "./src/components/Icon/Icon";
-import Button from "./src/components/Button/Button";
-import Close from "./assets/icons/Close.svg";
-import Back from "./assets/icons/Back.svg";
 import Navbar from "./src/components/Navbar/Navbar";
 
 export default function App() {
@@ -94,17 +80,6 @@ export default function App() {
 
   // onPress={() => navigation.navigate("Welcome")}
 
-  const backButton = () => {
-    return (
-      <Button
-        buttonType={"tertiary"}
-        buttonSize={"sm"}
-        onPress={() => navigation.goBack()}
-        iconLeft={<Back color={theme.color.surface.onBasePrimary} />}
-        styles={{ gap: 0 }}
-      />
-    );
-  };
 
   const UnAuthenticatedStack = () => {
     return (
@@ -181,9 +156,11 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer>
-      <UnAuthenticatedStack />
-    </NavigationContainer>
+    <AuthContextProvider>
+      <NavigationContainer>
+        <UnAuthenticatedStack />
+      </NavigationContainer>
+    </AuthContextProvider>
   );
 }
 
