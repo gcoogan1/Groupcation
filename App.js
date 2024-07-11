@@ -14,6 +14,7 @@ import Onboarding from "./src/screens/UnAuth/Onboarding/Onboarding";
 import TestScreen from "./src/screens/TestScreen";
 import { theme } from "./src/styles/theme";
 import Navbar from "./src/components/Navbar/Navbar";
+import UserContextProvider from "./src/state/userContext";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -156,11 +157,13 @@ export default function App() {
   };
 
   return (
+    <UserContextProvider>
     <AuthContextProvider>
       <NavigationContainer>
         <UnAuthenticatedStack />
       </NavigationContainer>
     </AuthContextProvider>
+    </UserContextProvider>
   );
 }
 
