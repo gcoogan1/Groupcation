@@ -17,13 +17,13 @@ import { navBarStyles } from "./styles/Navbar.styles";
  * @prop {function} onSharePress optional -> event to be fired, should navigate to share screen
  * @prop {function} onSettingsPress optional -> event to be fired, should navigate to settings screen
  * @returns {ReactNode} Renders a top navbar.
- * 
- * @example   
- * <Navbar 
- *  type={"groupcation"} 
- *  pageTitle={"Overview"} 
- *  onSharePress={() => console.log("share")} 
- *  onSettingsPress={() => console.log('settings')} 
+ *
+ * @example
+ * <Navbar
+ *  type={"groupcation"}
+ *  pageTitle={"Overview"}
+ *  onSharePress={() => console.log("share")}
+ *  onSettingsPress={() => console.log('settings')}
  * />
  */
 const Navbar = ({
@@ -32,9 +32,8 @@ const Navbar = ({
   onClosePress,
   onBackPress,
   onSharePress,
-  onSettingsPress
+  onSettingsPress,
 }) => {
-
   const NAVBAR_COLOR = theme.color.surface.onBasePrimary;
 
   const iconButton = (icon, iconOnPress) => {
@@ -43,11 +42,7 @@ const Navbar = ({
         <Button
           styles={{ gap: 0 }}
           buttonSize="sm"
-          buttonType={
-            type === "close" || type === "userInput"
-              ? "tertiary"
-              : "default-inverse"
-          }
+          buttonType={type === "groupcation" ? "default" : "tertiary"}
           iconRight={icon}
           onPress={iconOnPress}
         />

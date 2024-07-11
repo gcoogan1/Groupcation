@@ -11,7 +11,7 @@ import { getButtonStyle, getTextStyle, getDisplayIcon } from "./util/util";
  * @param {string} children required -> label of button
  * @param {function} onPress required -> onClick event for button
  * @param {string} buttonType optional -> primary, default, default-inverse, secondary,
- * tonal, tonal-inverse, tertiary, destructive (defaults to the default type)
+ * tonal, tonal-inverse, tertiary, destructive (defaults to the default type) *MUST BE LOWER-CASE
  * @param {string} buttonSize optional -> sm, md (defaults to md)
  * @param {boolean} isDisabled optional -> sets disabled state of button
  * @param {boolean} isLoading optional -> sets loading state of button
@@ -45,7 +45,6 @@ const Button = ({
   textStyle,
 }) => {
   const typeTextStyle = getTextStyle(buttonType, isDisabled);
-
   return (
     <Pressable
       style={({ pressed, focused }) => [

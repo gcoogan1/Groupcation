@@ -1,6 +1,6 @@
 const REQUIRED_VERTICAL_KEYS = ["top", "middle", "bottom"];
 const REQUIRED_HORIZONTAL_KEYS = ["left", "right"];
-const REQUIRED_BUTTON_PROPERTIES = ["label", "onPress"];
+const REQUIRED_BUTTON_PROPERTIES = ["label", "onPress", "buttonType"];
 
 const verifyButtonGroup = (btnsGroup, requiredKeys) => {
   const groupKeys = Object.keys(btnsGroup);

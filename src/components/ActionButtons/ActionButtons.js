@@ -16,15 +16,18 @@ import { horizontalStyles, verticalStyles } from "./styles/ActionButton.styles";
       vertical: {
         top: {
           label: 'Label Top',
-          onPress: () => console.log("TOP")
+          onPress: () => console.log("TOP"),
+          buttonType: 'default'
         },
         middle: {
           label: 'Label Middle',
-          onPress: () => console.log("MIDDLE")
+          onPress: () => console.log("MIDDLE"),
+          buttonType: 'default'
         },
         bottom: {
           label: 'Label Bottom',
-          onPress: () => console.log("BOTTOM")
+          onPress: () => console.log("BOTTOM"),
+          buttonType: 'default'
         },
       }
     }
@@ -33,15 +36,17 @@ import { horizontalStyles, verticalStyles } from "./styles/ActionButton.styles";
       horizontal: {
         left: {
           label: 'Label Left',
-          onPress: () => console.log("LEFT")
+          onPress: () => console.log("LEFT"),
+          buttonType: 'default'
         },
         right: {
           label: 'Label Right',
-          onPress: () => console.log("RIGHT")
+          onPress: () => console.log("RIGHT"),
+          buttonType: 'default'
         }
       }
   }
- * @param {number} progressStep required -> Must contain a step from 0-1
+ * @param {number} progressStep required (if horizontal) -> Must contain a step from 0-1
  * @returns {ReactElement} Renders a group of action buttons.
  * 
  * @example   
@@ -70,13 +75,7 @@ const ActionButtons = ({ layoutStyle, buttonsGroup, progressStep }) => {
                 <Button
                   key={key}
                   styles={{ width: "100%" }}
-                  buttonType={
-                    key === "top"
-                      ? "default"
-                      : key === "middle"
-                      ? "tonal"
-                      : "tertiary"
-                  }
+                  buttonType={buttonProperties[key].buttonType}
                   onPress={buttonProperties[key].onPress}
                 >
                   {buttonProperties[key].label}
@@ -93,7 +92,7 @@ const ActionButtons = ({ layoutStyle, buttonsGroup, progressStep }) => {
                 buttonProperties[key] && (
                   <Button
                     key={key}
-                    buttonType={key === "left" ? "tertiary" : "default"}
+                    buttonType={buttonProperties[key].buttonType}
                     onPress={buttonProperties[key].onPress}
                   >
                     {buttonProperties[key].label}
