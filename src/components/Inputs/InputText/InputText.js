@@ -14,6 +14,7 @@ import Error from "../../../../assets/icons/Error.svg";
  * clear button, helper text and counter.
  * @prop {string} inputName required -> name of input
  * @prop {string} inputLabel required -> label to be displayed
+ * @prop {function} onUpdateValue required -> event to be fired to update input value when changed
  * @prop {string} placeholder optional -> placeholder text to be displayed
  * @prop {component} placeholderIcon optional -> icon to be displayed next to placeholder text, 
  * remember to include disabled color. (see below)
@@ -23,7 +24,8 @@ import Error from "../../../../assets/icons/Error.svg";
  * @prop {boolean} showClear optional -> if true, displays a clear buttton with the option 
  * to clear the input field
  * @prop {boolean} isDisabled optional -> disabled state of the input
- * @prop {boolean} inputError optional -> error state of the input
+ * @prop {boolean} isValid optional -> error state of the input
+ * @prop {string} errorMessage optional -> error message of input
  * @returns {ReactNode} Renders a input text field.
  * 
  * @example 
@@ -55,7 +57,9 @@ const InputText = ({
   showCount,
   showClear,
   isDisabled,
-  inputError,
+  onUpdateValue,
+  isValid,
+  errorMessage
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [count, setCount] = useState(0);
@@ -78,12 +82,14 @@ const InputText = ({
         setCount(characterLength);
       }
     }
+    onUpdateValue(char)
   };
 
   const handleClearInput = () => {
     inputRef.current.clear();
     setCount(0);
   };
+
 
   return (
     <View style={inputTextStyles.container}>
@@ -92,7 +98,7 @@ const InputText = ({
           style={[
             inputTextStyles.label,
             isDisabled && inputTextStyles.labelDisabled,
-            inputError && inputTextStyles.labelError,
+            !isValid && inputTextStyles.labelError,
           ]}
         >
           {inputLabel}
@@ -109,7 +115,7 @@ const InputText = ({
             style={[
               inputTextStyles.inputContainer,
               isFocused && inputTextStyles.inputContainerFocused,
-              inputError && inputTextStyles.inputContainerError,
+              !isValid && inputTextStyles.inputContainerError,
               isDisabled && inputTextStyles.inputContainerDisabled,
             ]}
           >
@@ -124,19 +130,19 @@ const InputText = ({
               onBlur={handleBlur}
               onFocus={handleFocus}
               onChangeText={(e) => {
-                handleOnChange(e), onChange;
+                handleOnChange(e);
               }}
-              value={value}
+              // value={value}
               editable={!isDisabled}
             />
-            {!!showClear && !inputError && !isDisabled && (
+            {!!showClear && isValid && !isDisabled && (
               <TouchableOpacity onPress={handleClearInput}>
                 <Icon>
                   <Close color={theme.color.surface.onBaseSecondary} />
                 </Icon>
               </TouchableOpacity>
             )}
-            {!!inputError && (
+            {!isValid && (
               <Icon>
                 <Error color={theme.color.error.base} />
               </Icon>
@@ -155,8 +161,8 @@ const InputText = ({
           {helperText}
         </Text>
       )}
-      {!!inputError && (
-        <Text style={inputTextStyles.errorText}>This is required.</Text>
+      {!isValid && (
+        <Text style={inputTextStyles.errorText}>{errorMessage}</Text>
       )}
     </View>
   );

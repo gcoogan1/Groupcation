@@ -7,6 +7,7 @@ export const dialogStyles = StyleSheet.create({
     ...theme.border.radius.lg,
     backgroundColor: theme.color.surface.base,
     elevation: 2,
+    width: '80%',
     shadowColor: theme.color.shadow.dark,
     shadowOpacity: 0.10,
     shadowOffset: { width: 1, height: 1 },
@@ -15,8 +16,10 @@ export const dialogStyles = StyleSheet.create({
   contents: {
     paddingTop: theme.spacing.lg,
     paddingBottom: theme.spacing.md,
-    paddingHorizontal: theme.spacing.md,
     gap: theme.spacing.md
+  },
+  textContainer: {
+    paddingHorizontal: theme.spacing.md,
   },
   titleContainer: {
     gap: theme.spacing.xs
@@ -28,7 +31,6 @@ export const dialogStyles = StyleSheet.create({
   },
   subTitle: {
     ...theme.typeography.body.md,
-    color: theme.color.surface.onBaseSecondary,
-    textTransform: 'capitalize'
+    color: theme.color.surface.onBaseSecondary
   }
 })

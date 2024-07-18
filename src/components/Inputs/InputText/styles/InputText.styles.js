@@ -5,7 +5,7 @@ import { theme } from "../../../../styles/theme";
 export const inputTextStyles = StyleSheet.create({
   container: {
     // minWidth: 300,
-    minHeight: 130,
+    minHeight: 110,
     gap: theme.spacing["2xs"],
   },
   labelContainer: {

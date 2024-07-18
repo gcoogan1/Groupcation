@@ -17,17 +17,17 @@ import { horizontalStyles, verticalStyles } from "./styles/ActionButton.styles";
         top: {
           label: 'Label Top',
           onPress: () => console.log("TOP"),
-          buttonType: 'default'
+          buttonType: 'default',
         },
         middle: {
           label: 'Label Middle',
           onPress: () => console.log("MIDDLE"),
-          buttonType: 'default'
+          buttonType: 'default',
         },
         bottom: {
           label: 'Label Bottom',
           onPress: () => console.log("BOTTOM"),
-          buttonType: 'default'
+          buttonType: 'default',
         },
       }
     }
@@ -37,12 +37,12 @@ import { horizontalStyles, verticalStyles } from "./styles/ActionButton.styles";
         left: {
           label: 'Label Left',
           onPress: () => console.log("LEFT"),
-          buttonType: 'default'
+          buttonType: 'default',
         },
         right: {
           label: 'Label Right',
           onPress: () => console.log("RIGHT"),
-          buttonType: 'default'
+          buttonType: 'default',
         }
       }
   }
@@ -77,6 +77,7 @@ const ActionButtons = ({ layoutStyle, buttonsGroup, progressStep }) => {
                   styles={{ width: "100%" }}
                   buttonType={buttonProperties[key].buttonType}
                   onPress={buttonProperties[key].onPress}
+                  isLoading={buttonProperties[key].isLoading}
                 >
                   {buttonProperties[key].label}
                 </Button>
@@ -94,6 +95,7 @@ const ActionButtons = ({ layoutStyle, buttonsGroup, progressStep }) => {
                     key={key}
                     buttonType={buttonProperties[key].buttonType}
                     onPress={buttonProperties[key].onPress}
+                    isLoading={buttonProperties[key].isLoading}
                   >
                     {buttonProperties[key].label}
                   </Button>

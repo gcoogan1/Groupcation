@@ -36,14 +36,16 @@ const FormGroup = ({
   footerLayout,
 }) => {
   return (
-    <ScrollView style={{ width: "100%" }}>
-      <PageHeader header={formHeader} subHeader={formSubHeader} />
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      {(formHeader || formSubHeader) && <PageHeader header={formHeader} subHeader={formSubHeader} />}
       <View
-        style={[density ? formGroupStyles[density] : formGroupStyles.default]}
+        style={[{ flex: 1 }, density ? formGroupStyles[density] : formGroupStyles.default]}
       >
         {children}
       </View>
-      <ActionButtons buttonsGroup={footerButtons} layoutStyle={footerLayout} />
+      <View style={{ flex: 1, justifyContent: 'flex-end'}}>
+        <ActionButtons buttonsGroup={footerButtons} layoutStyle={footerLayout} />
+      </View>
     </ScrollView>
   );
 };
