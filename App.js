@@ -15,6 +15,7 @@ import Navbar from "./src/components/Navbar/Navbar";
 import UserContextProvider from "./src/state/userContext";
 import Email from "./src/screens/UnAuth/Registation/Email/Email";
 import Name from "./src/screens/UnAuth/Registation/Name/Name";
+import PasswordScreen from "./src/screens/UnAuth/Registation/Password.js/Password";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -130,7 +131,7 @@ export default function App() {
         />
         <Stack.Screen
           name="Password"
-          component={TestScreen}
+          component={PasswordScreen}
           options={({ navigation }) => ({
             headerTitle: "",
             headerShadowVisible: false,

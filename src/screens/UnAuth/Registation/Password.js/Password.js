@@ -3,45 +3,58 @@ import { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { UserContext } from "../../../../state/userContext";
-import InputText from "../../../../components/Inputs/InputText/InputText";
-import SocialLogin from "../../../../components/SocialLogin/SocialLogin";
+import InputPassword from "../../../../components/Inputs/InputPassword/InputPassword";
 import FormGroup from "../../../../components/FormGroup/FormGroup";
 import Dialog from "../../../../components/Dialog/Dialog";
 
-const Email = () => {
-  const [enteredEmail, setEnteredEmail] = useState();
-  const [emailIsValid, setEmailIsValid] = useState(true);
-  const [emailExists, setEmailExists] = useState(false);
+const PasswordScreen = () => {
+  const [enteredPassword, setEnteredPassword] = useState();
+  const [passwordIsValid, setPasswordIsValid] = useState(true);
+  const [isEmpty, setIsEmpty] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   const userContext = useContext(UserContext);
   const navigation = useNavigation();
 
   const updateInputValueHandler = (enteredVal) => {
-    userContext.updateUser("email", enteredVal);
-    setEnteredEmail(enteredVal);
+    userContext.updateUser("password", enteredVal);
+    setEnteredPassword(enteredVal);
+  };
+ 
+  const isPasswordValid = (password) => {
+
+    if (!password || password?.length < 0) {
+      setIsEmpty(true)
+      return false
+    }
+
+    setIsEmpty(false);
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(
+      password
+    );
   };
 
   const navigateToNextScreen = () => {
+
+    const isValid = isPasswordValid(enteredPassword);
+
     setIsLoading(true);
-    const isValid = enteredEmail && enteredEmail.includes("@");
-    
     if (!isValid) {
-      setEmailIsValid(false);
+      setPasswordIsValid(false);
       setIsLoading(false);
-      setModalVisible(true);
       return;
     }
-    setEmailIsValid(true);
-    navigation.navigate("Name");
+    setPasswordIsValid(true);
     setIsLoading(false);
+    navigation.navigate("Verification");
   };
+
 
   const actionButtons = {
     vertical: {
       top: {
-        label: "Continue",
+        label: "Create Account",
         onPress: () => navigateToNextScreen(),
         buttonType: "primary",
         isLoading: isLoading,
@@ -60,44 +73,52 @@ const Email = () => {
     },
   };
 
-  const registeredButtons = {
-    vertical: {
-      top: {
-        label: "Go to login",
-        onPress: () => navigation.navigate("Login"),
-        buttonType: "default",
-        isLoading: isLoading,
-      },
-      bottom: {
-        label: "Dismiss",
-        onPress: () => setEmailIsValid(true),
-        buttonType: "tertiary",
-        isLoading: isLoading,
-      },
+  const passwordRequirments = [
+    {
+      id: 1,
+      title: "8 characters in length",
     },
-  };
+    {
+      id: 2,
+      title: "1 uppercase letter",
+    },
+    {
+      id: 3,
+      title: "1 lowercase letter",
+    },
+    {
+      id: 4,
+      title: "1 number",
+    },
+    {
+      id: 5,
+      title: "1 special character",
+    },
+  ];
 
   return (
     <View style={{ flex: 1 }}>
       <FormGroup
-        formHeader={"What's your email?"}
-        formSubHeader={"This will be used to create your account"}
+        formHeader={"Almost Done"}
         footerButtons={actionButtons}
         footerLayout={"vertical"}
         density={"compact"}
       >
-        <InputText
-          inputLabel={"Email Address"}
-          inputName="email"
-          isValid={emailIsValid}
+        <InputPassword
+          inputLabel={"Create Password"}
+          inputName="password"
           onUpdateValue={(val) => updateInputValueHandler(val)}
-          errorMessage={"Please enter a valid email address."}
-          keyboardType={"email"}
-          showClear={true}
+          helperText={"Password is required to have a minimum of:"}
+          helperTextData={passwordRequirments}
+          isValid={passwordIsValid}
+          errorMessage={
+            isEmpty
+              ? "Please create a password"
+              : "Please make sure password meets minimum requirements."
+          }
         />
-        <SocialLogin />
       </FormGroup>
-      {!emailIsValid && (
+      {!passwordIsValid && (
         <>
           <Modal
             animationType="slide"
@@ -116,18 +137,18 @@ const Email = () => {
                 backgroundColor: "rgba(0, 0, 0, 0.7)",
               }}
             >
-              {emailExists ? (
+              {isEmpty ? (
                 <Dialog
-                  title={"Email Already Registered"}
-                  subTitle={
-                    "Looks like this email is associated with an existing account. If you have an account, please log in."
-                  }
-                  footerButtons={registeredButtons}
+                  title={"No Password Entered"}
+                  subTitle={"Please create a password."}
+                  footerButtons={invalidButtons}
                 />
               ) : (
                 <Dialog
-                  title={"Invalid Email Address"}
-                  subTitle={"Please check the email and try again."}
+                  title={"Invalid Password"}
+                  subTitle={
+                    "Password does not meet minimum requirements. Please try again."
+                  }
                   footerButtons={invalidButtons}
                 />
               )}
@@ -139,4 +160,4 @@ const Email = () => {
   );
 };
 
-export default Email;
+export default PasswordScreen;

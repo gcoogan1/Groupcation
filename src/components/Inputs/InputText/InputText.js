@@ -34,6 +34,7 @@ import Error from "../../../../assets/icons/Error.svg";
     placeholder={"placeholder text"}
     inputLabel={"input label"}
     inputName="placeholder"
+    onUpdateValue={(val) => updateInputValueHandler(val)}
     showCount
     showClear
     placeholderIcon={
