@@ -8,7 +8,6 @@ import SocialLogin from "../../../../components/SocialLogin/SocialLogin";
 import FormGroup from "../../../../components/FormGroup/FormGroup";
 import Dialog from "../../../../components/Dialog/Dialog";
 
-//TODO: Fix loading and
 const Email = () => {
   const [enteredEmail, setEnteredEmail] = useState();
   const [emailIsValid, setEmailIsValid] = useState(true);
@@ -26,6 +25,7 @@ const Email = () => {
   const navigateToNextScreen = () => {
     setIsLoading(true);
     const isValid = enteredEmail && enteredEmail.includes("@");
+    
     if (!isValid) {
       setEmailIsValid(false);
       setIsLoading(false);
@@ -52,7 +52,7 @@ const Email = () => {
     vertical: {
       top: {
         label: "Okay",
-        onPress: () => setEmailIsValid(true),
+        onPress: () => setModalVisible(false),
         buttonType: "default",
         isLoading: isLoading,
       },
@@ -91,6 +91,7 @@ const Email = () => {
           isValid={emailIsValid}
           onUpdateValue={(val) => updateInputValueHandler(val)}
           errorMessage={"Please enter a valid email address."}
+          keyboardType={"email"}
           showClear={true}
         />
         <SocialLogin />

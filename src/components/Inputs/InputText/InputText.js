@@ -15,6 +15,7 @@ import Error from "../../../../assets/icons/Error.svg";
  * @prop {string} inputName required -> name of input
  * @prop {string} inputLabel required -> label to be displayed
  * @prop {function} onUpdateValue required -> event to be fired to update input value when changed
+ * @prop {string} keyboardType optional -> type of keyboard
  * @prop {string} placeholder optional -> placeholder text to be displayed
  * @prop {component} placeholderIcon optional -> icon to be displayed next to placeholder text, 
  * remember to include disabled color. (see below)
@@ -51,6 +52,7 @@ import Error from "../../../../assets/icons/Error.svg";
 const InputText = ({
   inputName,
   inputLabel,
+  keyboardType,
   placeholder,
   placeholderIcon,
   helperText,
@@ -133,7 +135,9 @@ const InputText = ({
                 handleOnChange(e);
               }}
               // value={value}
+              keyboardType={keyboardType}
               editable={!isDisabled}
+              maxLength={50}
             />
             {!!showClear && isValid && !isDisabled && (
               <TouchableOpacity onPress={handleClearInput}>

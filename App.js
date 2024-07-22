@@ -14,6 +14,7 @@ import { theme } from "./src/styles/theme";
 import Navbar from "./src/components/Navbar/Navbar";
 import UserContextProvider from "./src/state/userContext";
 import Email from "./src/screens/UnAuth/Registation/Email/Email";
+import Name from "./src/screens/UnAuth/Registation/Name/Name";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -116,7 +117,7 @@ export default function App() {
         />
         <Stack.Screen
           name="Name"
-          component={TestScreen}
+          component={Name}
           options={({ navigation }) => ({
             headerTitle: "",
             headerShadowVisible: false,

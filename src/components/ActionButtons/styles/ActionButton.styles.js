@@ -6,7 +6,7 @@ export const verticalStyles = StyleSheet.create({
     borderTopWidth: theme.border.width.md.borderWidth,
     paddingHorizontal: theme.spacing.md,
     paddingTop: theme.spacing.md,
-    // paddingBottom: theme.spacing.lg,
+    paddingBottom: theme.spacing.lg,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
