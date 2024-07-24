@@ -3,9 +3,11 @@ import { useContext, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { UserContext } from "../../../../state/userContext";
+import PasswordConstants from "./constants/Password.constants";
 import InputPassword from "../../../../components/Inputs/InputPassword/InputPassword";
 import FormGroup from "../../../../components/FormGroup/FormGroup";
 import Dialog from "../../../../components/Dialog/Dialog";
+import { removeWhitespace } from "../../../../../util/helperFunctions/helperFunctions";
 
 const PasswordScreen = () => {
   const [enteredPassword, setEnteredPassword] = useState();
@@ -18,12 +20,12 @@ const PasswordScreen = () => {
   const navigation = useNavigation();
 
   const updateInputValueHandler = (enteredVal) => {
-    userContext.updateUser("password", enteredVal);
-    setEnteredPassword(enteredVal);
+    const formatedVal = removeWhitespace(enteredVal)
+    setEnteredPassword(formatedVal);
+    userContext.updateUser("password", formatedVal);
   };
  
   const isPasswordValid = (password) => {
-
     if (!password || password?.length < 0) {
       setIsEmpty(true)
       return false
@@ -36,7 +38,6 @@ const PasswordScreen = () => {
   };
 
   const navigateToNextScreen = () => {
-
     const isValid = isPasswordValid(enteredPassword);
 
     setIsLoading(true);
@@ -50,7 +51,7 @@ const PasswordScreen = () => {
     navigation.navigate("Verification");
   };
 
-
+  // FOOTER/MODAL BUTTONS
   const actionButtons = {
     vertical: {
       top: {
@@ -73,29 +74,6 @@ const PasswordScreen = () => {
     },
   };
 
-  const passwordRequirments = [
-    {
-      id: 1,
-      title: "8 characters in length",
-    },
-    {
-      id: 2,
-      title: "1 uppercase letter",
-    },
-    {
-      id: 3,
-      title: "1 lowercase letter",
-    },
-    {
-      id: 4,
-      title: "1 number",
-    },
-    {
-      id: 5,
-      title: "1 special character",
-    },
-  ];
-
   return (
     <View style={{ flex: 1 }}>
       <FormGroup
@@ -109,7 +87,7 @@ const PasswordScreen = () => {
           inputName="password"
           onUpdateValue={(val) => updateInputValueHandler(val)}
           helperText={"Password is required to have a minimum of:"}
-          helperTextData={passwordRequirments}
+          helperTextData={PasswordConstants.PASSWORD_REQUIREMENTS}
           isValid={passwordIsValid}
           errorMessage={
             isEmpty

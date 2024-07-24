@@ -42,3 +42,7 @@ export const nameIsValid = (name) => {
   if (!nameExists || containsSpecialChar(name)) return false;
   return true;
 }
+
+export const removeWhitespace = (str) => {
+  return str.replace(/\s+/g, '')
+}

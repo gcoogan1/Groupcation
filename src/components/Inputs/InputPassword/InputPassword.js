@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, FlatList } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { createRef, useState } from "react";
 
@@ -186,10 +186,12 @@ const InputPassword = ({
           >
             {helperText}
           </Text>
-          <FlatList
-            data={helperTextData}
-            renderItem={({ item }) => <Item title={item.title} />}
-          />
+          <ScrollView horizontal={true} contentContinaerStyle={{flexGrow: 1}}>
+            <FlatList
+              data={helperTextData}
+              renderItem={({ item }) => <Item title={item.title} />}
+            />
+          </ScrollView>
         </View>
       )}
       {!isValid && (

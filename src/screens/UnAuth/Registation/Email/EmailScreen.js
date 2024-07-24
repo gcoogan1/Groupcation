@@ -8,7 +8,7 @@ import SocialLogin from "../../../../components/SocialLogin/SocialLogin";
 import FormGroup from "../../../../components/FormGroup/FormGroup";
 import Dialog from "../../../../components/Dialog/Dialog";
 
-const Email = () => {
+const EmailScreen = () => {
   const [enteredEmail, setEnteredEmail] = useState();
   const [emailIsValid, setEmailIsValid] = useState(true);
   const [emailExists, setEmailExists] = useState(false);
@@ -139,4 +139,4 @@ const Email = () => {
   );
 };
 
-export default Email;
+export default EmailScreen;

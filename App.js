@@ -9,13 +9,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import AuthContextProvider, { AuthContext } from "./src/state/authContext";
 import Onboarding from "./src/screens/UnAuth/Onboarding/Onboarding";
-import TestScreen from "./src/screens/TestScreen";
 import { theme } from "./src/styles/theme";
 import Navbar from "./src/components/Navbar/Navbar";
 import UserContextProvider from "./src/state/userContext";
-import Email from "./src/screens/UnAuth/Registation/Email/Email";
-import Name from "./src/screens/UnAuth/Registation/Name/Name";
-import PasswordScreen from "./src/screens/UnAuth/Registation/Password.js/Password";
+import PasswordScreen from "./src/screens/UnAuth/Registation/Password/PasswordScreen";
+import EmailScreen from "./src/screens/UnAuth/Registation/Email/EmailScreen";
+import NameScreen from "./src/screens/UnAuth/Registation/Name/NameScreen";
+import VerificationScreen from "./src/screens/UnAuth/Registation/Verification/VerificationScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -102,7 +102,7 @@ export default function App() {
         />
         <Stack.Screen
           name="Email"
-          component={Email}
+          component={EmailScreen}
           options={({ navigation }) => ({
             headerTitle: "",
             headerShadowVisible: false,
@@ -118,7 +118,7 @@ export default function App() {
         />
         <Stack.Screen
           name="Name"
-          component={Name}
+          component={NameScreen}
           options={({ navigation }) => ({
             headerTitle: "",
             headerShadowVisible: false,
@@ -144,7 +144,7 @@ export default function App() {
         />
         <Stack.Screen
           name="Verification"
-          component={TestScreen}
+          component={VerificationScreen}
           options={({ navigation }) => ({
             headerTitle: "",
             headerShadowVisible: false,

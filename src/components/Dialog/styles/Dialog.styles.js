@@ -22,7 +22,7 @@ export const dialogStyles = StyleSheet.create({
     paddingHorizontal: theme.spacing.md,
   },
   titleContainer: {
-    gap: theme.spacing.xs
+    gap: theme.spacing.xs,
   },
   title: {
     ...theme.typeography.title.md,
@@ -31,6 +31,6 @@ export const dialogStyles = StyleSheet.create({
   },
   subTitle: {
     ...theme.typeography.body.md,
-    color: theme.color.surface.onBaseSecondary
+    color: theme.color.surface.onBaseSecondary,
   }
 })
