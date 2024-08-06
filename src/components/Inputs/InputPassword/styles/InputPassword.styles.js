@@ -60,6 +60,9 @@ export const inputPasswordStyles = StyleSheet.create({
   inputDisabled: {
     color: theme.color.disabled.onBase,
   },
+  helperTextContainer: {
+    marginTop: theme.spacing.xs,
+  },
   helperText: {
     ...theme.typeography.body.md,
     color: theme.color.surface.onBaseSecondary,
@@ -67,6 +70,9 @@ export const inputPasswordStyles = StyleSheet.create({
   },
   helperTextDisabled: {
     color: theme.color.disabled.onBase,
+  },
+  itemText: {
+    marginLeft: theme.spacing.md
   },
   errorText: {
     ...theme.typeography.body.md,

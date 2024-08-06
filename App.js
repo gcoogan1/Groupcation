@@ -1,20 +1,21 @@
-import {
-  StyleSheet,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import {
   useFonts,
   Rubik_400Regular,
   Rubik_600SemiBold,
 } from "@expo-google-fonts/rubik";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import AuthContextProvider, { AuthContext } from "./src/state/authContext";
 import Onboarding from "./src/screens/UnAuth/Onboarding/Onboarding";
-import TestScreen from "./src/screens/TestScreen";
 import { theme } from "./src/styles/theme";
 import Navbar from "./src/components/Navbar/Navbar";
 import UserContextProvider from "./src/state/userContext";
+import PasswordScreen from "./src/screens/UnAuth/Registation/Password/PasswordScreen";
+import EmailScreen from "./src/screens/UnAuth/Registation/Email/EmailScreen";
+import NameScreen from "./src/screens/UnAuth/Registation/Name/NameScreen";
+import VerificationScreen from "./src/screens/UnAuth/Registation/Verification/VerificationScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -25,6 +26,14 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
+  const MyTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: '#ffffff'
+    },
+  };
 
   const Stack = createNativeStackNavigator();
   // const TopTabs = createMaterialTopTabNavigator();
@@ -81,7 +90,6 @@ export default function App() {
 
   // onPress={() => navigation.navigate("Welcome")}
 
-
   const UnAuthenticatedStack = () => {
     return (
       <Stack.Navigator>
@@ -94,60 +102,55 @@ export default function App() {
         />
         <Stack.Screen
           name="Email"
-          component={TestScreen}
+          component={EmailScreen}
           options={({ navigation }) => ({
             headerTitle: "",
+            headerShadowVisible: false,
             headerLeft: () => {
               return (
                 <Navbar
-                type={"close"} 
-                onClosePress={() => navigation.goBack()}
-               />
+                  type={"close"}
+                  onClosePress={() => navigation.goBack()}
+                />
               );
             },
           })}
         />
         <Stack.Screen
           name="Name"
-          component={TestScreen}
+          component={NameScreen}
           options={({ navigation }) => ({
             headerTitle: "",
+            headerShadowVisible: false,
             headerLeft: () => {
               return (
-                <Navbar
-                  type={"back"}
-                  onBackPress={() => navigation.goBack()}
-                />
+                <Navbar type={"back"} onBackPress={() => navigation.goBack()} />
               );
             },
           })}
         />
         <Stack.Screen
           name="Password"
-          component={TestScreen}
+          component={PasswordScreen}
           options={({ navigation }) => ({
             headerTitle: "",
+            headerShadowVisible: false,
             headerLeft: () => {
               return (
-                <Navbar
-                  type={"back"}
-                  onBackPress={() => navigation.goBack()}
-                />
+                <Navbar type={"back"} onBackPress={() => navigation.goBack()} />
               );
             },
           })}
         />
         <Stack.Screen
           name="Verification"
-          component={TestScreen}
+          component={VerificationScreen}
           options={({ navigation }) => ({
             headerTitle: "",
+            headerShadowVisible: false,
             headerLeft: () => {
               return (
-                <Navbar
-                  type={"back"}
-                  onBackPress={() => navigation.goBack()}
-                />
+                <Navbar type={"back"} onBackPress={() => navigation.goBack()} />
               );
             },
           })}
@@ -158,11 +161,11 @@ export default function App() {
 
   return (
     <UserContextProvider>
-    <AuthContextProvider>
-      <NavigationContainer>
-        <UnAuthenticatedStack />
-      </NavigationContainer>
-    </AuthContextProvider>
+      <AuthContextProvider>
+        <NavigationContainer theme={MyTheme}>
+          <UnAuthenticatedStack />
+        </NavigationContainer>
+      </AuthContextProvider>
     </UserContextProvider>
   );
 }

@@ -29,3 +29,20 @@ export const objectKeysMatch = (obj1, obj2) => {
 };
 
 export const formatInputDate = (dateStr) => dateStr ? format(parse(dateStr, 'MM/dd/yyyy', new Date()), 'yyyy-MM-dd') : null;
+
+export const containsSpecialChar = (str) => {
+  const specialChar = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/;
+
+  return specialChar.test(str);
+}
+
+export const nameIsValid = (name) => {
+  const nameExists = name && name.length > 0;
+
+  if (!nameExists || containsSpecialChar(name)) return false;
+  return true;
+}
+
+export const removeWhitespace = (str) => {
+  return str.replace(/\s+/g, '')
+}

@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, FlatList, SafeAreaView, ScrollView } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { createRef, useState } from "react";
 
@@ -14,13 +14,25 @@ import InlineButton from "../../InlineButton/InlineButton";
  * This component renders a password input that gives the option to show/hide password.
  * @prop {string} inputName required -> name of input
  * @prop {string} inputLabel required -> label to be displayed
+ * @prop {function} onUpdateValue required -> event to be fired to update input value when changed
  * @prop {string} placeholder optional -> placeholder text to be displayed
  * @prop {component} placeholderIcon optional -> icon to be displayed next to placeholder text, 
  * remember to include disabled color. (see below)
  * Ex. <Placeholder color={!isDisabled ? theme.color.surface.onBasePrimary : theme.color.disabled.onBase} />
  * @prop {string} helperText optional -> helper text to be displayed below the input
+ * @prop {array} helperTextData optional -> array of objects showing password requirement.
+ * Ex. const data = [
+    {
+      id: 1,
+      title: "8 characters in length",
+    },
+    {
+      id: 2,
+      title: "1 uppercase letter",
+   }]
  * @prop {boolean} isDisabled optional -> disabled state of the input
- * @prop {boolean} inputError optional -> error state of the input
+ * @prop {boolean} isValid optional -> error state of the input
+ * @prop {boolean} errorMessage optional -> error message to display
  * @returns {ReactNode} Renders a input password field.
  * 
  * @example 
@@ -28,6 +40,7 @@ import InlineButton from "../../InlineButton/InlineButton";
     placeholder={"placeholder text"}
     inputLabel={"input label"}
     inputName="placeholder"
+    onUpdateValue={(val) => updateInputValueHandler(val)}
     showCount
     showClear
     placeholderIcon={
@@ -48,9 +61,12 @@ const InputPassword = ({
   inputLabel,
   placeholder,
   placeholderIcon,
+  onUpdateValue,
   helperText,
+  helperTextData,
   isDisabled,
-  inputError
+  errorMessage,
+  isValid
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -72,7 +88,22 @@ const InputPassword = ({
     if (countLength !== characterLength) {
       setCount(characterLength);
     }
+    onUpdateValue(char)
   };
+
+  const Item = ({title}) => (
+    <View>
+      <Text
+        style={[
+          inputPasswordStyles.itemText,
+          inputPasswordStyles.helperText,
+          isDisabled && inputPasswordStyles.helperTextDisabled,
+        ]}
+      >
+        {`\u2022  ${title}`}
+      </Text>
+    </View>
+  );
 
   return (
     <View style={inputPasswordStyles.container}>
@@ -81,7 +112,7 @@ const InputPassword = ({
           style={[
             inputPasswordStyles.label,
             isDisabled && inputPasswordStyles.labelDisabled,
-            inputError && inputPasswordStyles.labelError,
+            !isValid && inputPasswordStyles.labelError,
           ]}
         >
           {inputLabel}
@@ -97,7 +128,7 @@ const InputPassword = ({
             style={[
               inputPasswordStyles.inputContainer,
               isFocused && inputPasswordStyles.inputContainerFocused,
-              inputError && inputPasswordStyles.inputContainerError,
+              !isValid && inputPasswordStyles.inputContainerError,
               isDisabled && inputPasswordStyles.inputContainerDisabled,
             ]}
           >
@@ -117,6 +148,7 @@ const InputPassword = ({
               }}
               value={value}
               editable={!isDisabled}
+              isValid={isValid}
             />
 
             {count > 0 && (
@@ -145,17 +177,25 @@ const InputPassword = ({
         name={inputName}
       />
       {!!helperText && (
-        <Text
-          style={[
-            inputPasswordStyles.helperText,
-            isDisabled && inputPasswordStyles.helperTextDisabled,
-          ]}
-        >
-          {helperText}
-        </Text>
+        <View style={inputPasswordStyles.helperTextContainer}>
+          <Text
+            style={[
+              inputPasswordStyles.helperText,
+              isDisabled && inputPasswordStyles.helperTextDisabled,
+            ]}
+          >
+            {helperText}
+          </Text>
+          <ScrollView horizontal={true} contentContinaerStyle={{flexGrow: 1}}>
+            <FlatList
+              data={helperTextData}
+              renderItem={({ item }) => <Item title={item.title} />}
+            />
+          </ScrollView>
+        </View>
       )}
-      {!!inputError && (
-        <Text style={inputPasswordStyles.errorText}>This is required.</Text>
+      {!isValid && (
+        <Text style={inputPasswordStyles.errorText}>{errorMessage}</Text>
       )}
     </View>
   );

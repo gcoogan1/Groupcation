@@ -16,6 +16,6 @@ export const pageHeaderStyles = StyleSheet.create({
   subHeader: {
     ...theme.typeography.body.md,
     color: theme.color.surface.onBaseSecondary,
-    textTransform: "capitalize",
+    textAlign: 'center'
   },
 });

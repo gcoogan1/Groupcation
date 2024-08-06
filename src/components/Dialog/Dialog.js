@@ -1,7 +1,7 @@
-import { Text, View } from 'react-native'
+import { Text, View } from "react-native";
 
-import ActionButtons from '../ActionButtons/ActionButtons'
-import { dialogStyles } from './styles/Dialog.styles'
+import ActionButtons from "../ActionButtons/ActionButtons";
+import { dialogStyles } from "./styles/Dialog.styles";
 
 /**
  * This component renders a dialog with optional title, subTitle and child component.
@@ -23,17 +23,17 @@ const Dialog = ({ footerButtons, title, subTitle, children }) => {
   return (
     <View style={dialogStyles.container}>
       <View style={dialogStyles.contents}>
-        <View style={dialogStyles.titleContainer}>
-          <Text style={dialogStyles.title}>{title}</Text>
-          <Text style={dialogStyles.subTitle}>{subTitle}</Text>
+        <View style={dialogStyles.textContainer}>
+          <View style={dialogStyles.titleContainer}>
+            <Text style={dialogStyles.title}>{title}</Text>
+            <Text style={dialogStyles.subTitle}>{subTitle}</Text>
+          </View>
         </View>
-        <View>
-          {children}
-        </View>
+        <View>{children}</View>
+        <ActionButtons buttonsGroup={footerButtons} layoutStyle={"vertical"} />
       </View>
-      <ActionButtons buttonsGroup={footerButtons} layoutStyle={'vertical'}  />
     </View>
-  )
-}
+  );
+};
 
-export default Dialog
+export default Dialog;
