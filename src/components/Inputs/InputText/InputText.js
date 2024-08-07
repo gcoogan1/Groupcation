@@ -4,7 +4,7 @@ import { createRef, useState } from "react";
 
 import { theme } from "../../../styles/theme";
 import { inputTextStyles } from "./styles/InputText.styles";
-import { capitilaizeFirstLetter } from "../../../../util/helperFunctions/helperFunctions";
+import { capitilaizeFirstLetter } from "../../../util/helperFunctions/helperFunctions";
 import Icon from "../../Icon/Icon";
 import Close from "../../../../assets/icons/Close.svg";
 import Error from "../../../../assets/icons/Error.svg";
@@ -27,6 +27,7 @@ import Error from "../../../../assets/icons/Error.svg";
  * @prop {boolean} isDisabled optional -> disabled state of the input
  * @prop {boolean} isValid optional -> error state of the input
  * @prop {string} errorMessage optional -> error message of input
+ * @prop {function} clearInput optional -> event to be fire when clear button is pressed
  * @returns {ReactNode} Renders a input text field.
  * 
  * @example 
@@ -62,7 +63,8 @@ const InputText = ({
   isDisabled,
   onUpdateValue,
   isValid,
-  errorMessage
+  errorMessage,
+  clearInput
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [count, setCount] = useState(0);
@@ -91,6 +93,9 @@ const InputText = ({
   const handleClearInput = () => {
     inputRef.current.clear();
     setCount(0);
+    if (clearInput) {
+      clearInput()
+    }
   };
 
 

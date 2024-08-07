@@ -4,7 +4,7 @@ import { createRef, useState } from "react";
 
 import { theme } from "../../../styles/theme";
 import { inputPasswordStyles } from "./styles/InputPassword.styles";
-import { capitilaizeFirstLetter } from "../../../../util/helperFunctions/helperFunctions";
+import { capitilaizeFirstLetter } from "../../../util/helperFunctions/helperFunctions";
 import Icon from "../../Icon/Icon";
 import Close from "../../../../assets/icons/Close.svg";
 import Error from "../../../../assets/icons/Error.svg";

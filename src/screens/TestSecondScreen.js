@@ -4,7 +4,7 @@ import FormGroup from "../components/FormGroup/FormGroup";
 import InputText from "../components/Inputs/InputText/InputText"
 import TopBar from "../components/TopBar/TopBar";
 import Dialog from "../components/Dialog/Dialog";
-import UtilityMessage from "../components/UtilityMessage/styles/UtilityMessage";
+import UtilityMessage from "../components/UtilityMessage/UtilityMessage";
 
 const TestSecondScreen = () => {
   const actionButtons = {

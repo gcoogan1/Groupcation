@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { StyleSheet } from "react-native";
 import {
   useFonts,
@@ -12,10 +13,13 @@ import Onboarding from "./src/screens/UnAuth/Onboarding/Onboarding";
 import { theme } from "./src/styles/theme";
 import Navbar from "./src/components/Navbar/Navbar";
 import UserContextProvider from "./src/state/userContext";
+import TestSecondScreen from "./src/screens/TestSecondScreen";
 import PasswordScreen from "./src/screens/UnAuth/Registation/Password/PasswordScreen";
 import EmailScreen from "./src/screens/UnAuth/Registation/Email/EmailScreen";
 import NameScreen from "./src/screens/UnAuth/Registation/Name/NameScreen";
 import VerificationScreen from "./src/screens/UnAuth/Registation/Verification/VerificationScreen";
+import LoginScreen from "./src/screens/UnAuth/Login/Login";
+import ResetSuccessScreen from "./src/screens/UnAuth/ResetSuccess/ResetSuccessScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -31,7 +35,7 @@ export default function App() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: '#ffffff'
+      background: "#ffffff",
     },
   };
 
@@ -155,16 +159,68 @@ export default function App() {
             },
           })}
         />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            headerShadowVisible: false,
+            headerLeft: () => {
+              return (
+                <Navbar
+                  type={"close"}
+                  onClosePress={() => navigation.goBack()}
+                />
+              );
+            },
+          })}
+        />
+        <Stack.Screen
+          name="ResetSuccess"
+          component={ResetSuccessScreen}
+          options={({ navigation }) => ({
+            headerTitle: "",
+            headerShadowVisible: false,
+            headerLeft: () => {
+              return (
+                <Navbar type={"back"} onBackPress={() => navigation.goBack()} />
+              );
+            },
+          })}
+        />
       </Stack.Navigator>
+    );
+  };
+
+  const AuthenticatedStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="home"
+          component={TestSecondScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
+
+  const Root = () => {
+    const authContext = useContext(AuthContext);
+
+    return (
+      <NavigationContainer theme={MyTheme}>
+        {!authContext.isAuth && <UnAuthenticatedStack />}
+        {!!authContext.isAuth && <AuthenticatedStack />}
+      </NavigationContainer>
     );
   };
 
   return (
     <UserContextProvider>
       <AuthContextProvider>
-        <NavigationContainer theme={MyTheme}>
-          <UnAuthenticatedStack />
-        </NavigationContainer>
+        <Root />
       </AuthContextProvider>
     </UserContextProvider>
   );
