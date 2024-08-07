@@ -28,21 +28,36 @@ export const objectKeysMatch = (obj1, obj2) => {
   );
 };
 
-export const formatInputDate = (dateStr) => dateStr ? format(parse(dateStr, 'MM/dd/yyyy', new Date()), 'yyyy-MM-dd') : null;
+export const formatInputDate = (dateStr) =>
+  dateStr
+    ? format(parse(dateStr, "MM/dd/yyyy", new Date()), "yyyy-MM-dd")
+    : null;
 
 export const containsSpecialChar = (str) => {
   const specialChar = /[!@#$%^&*()\-+={}[\]:;"'<>,.?\/|\\]/;
-
+  /^[a-z ,.'-]+$/i;
   return specialChar.test(str);
-}
+};
 
 export const nameIsValid = (name) => {
   const nameExists = name && name.length > 0;
+  const checkValidName = /^[a-z ,.'-]+$/i;
+  const isValidName = checkValidName.test(name);
 
-  if (!nameExists || containsSpecialChar(name)) return false;
+  if (!nameExists || !isValidName) return false;
   return true;
-}
+};
 
 export const removeWhitespace = (str) => {
-  return str.replace(/\s+/g, '')
-}
+  return str.replace(/\s+/g, "");
+};
+
+export const isPasswordValid = (password) => {
+  if (!password || password?.length < 0) {
+    return false;
+  }
+
+  return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/.test(
+    password
+  );
+};
