@@ -1,5 +1,5 @@
 import AWS from "aws-sdk";
-import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION } from '@env';
+import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, COGNITO_POOL_ID } from '@env';
 
 // NOTE: all env variables MUST begin with EXPO_PUBLIC
 AWS.config.update({
@@ -13,7 +13,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider();
 export const checkEmailExists = async (email) => {
   try {
     const params = {
-      UserPoolId: process.env.EXPO_PUBLIC_COGNITO_POOL_ID,
+      UserPoolId: COGNITO_POOL_ID,
       Filter: `email = "${email}"`,
       Limit: 1,
     };
@@ -30,7 +30,7 @@ export const checkEmailExists = async (email) => {
 export const isUserConfirmed = async (email) => {
   try {
     const params = {
-      UserPoolId: process.env.EXPO_PUBLIC_COGNITO_POOL_ID,
+      UserPoolId: COGNITO_POOL_ID,
       Filter: `email = "${email}"`,
       Limit: 1,
     };
