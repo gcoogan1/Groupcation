@@ -32,10 +32,18 @@ import { Text } from "react-native";
     emptyText={"Empty State Text"}
    />
  */
-const InputSearch = ({ data, onSearch, sectionTitle, emptyText, styles, isDisabled }) => {
+const InputSearch = ({
+  data,
+  onSearch,
+  sectionTitle,
+  emptyText,
+  styles,
+  isDisabled,
+}) => {
   const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [selections, setSelections] = useState([]);
+  const [initiateSearch, setIntiateSearch] = useState(false);
   const inputRef = createRef();
 
   const handleSearch = () => {
@@ -43,11 +51,12 @@ const InputSearch = ({ data, onSearch, sectionTitle, emptyText, styles, isDisabl
       onSearch(query.trim());
     }
     setQuery("");
+    setIntiateSearch(true);
   };
 
   const handleInputChange = (text) => {
+    setIntiateSearch(false);
     setQuery(text);
-
     // Filter selections by text
     const filteredSelections = data.filter((item) =>
       item.itemLabel.toLowerCase().includes(text.toLowerCase())
@@ -56,7 +65,9 @@ const InputSearch = ({ data, onSearch, sectionTitle, emptyText, styles, isDisabl
   };
 
   const handleSelectSelection = (item) => {
+    // Navigate to trip when pressedxa
     setQuery(item.itemLabel);
+    setIntiateSearch(false);
     setSelections([]);
   };
 
@@ -69,12 +80,12 @@ const InputSearch = ({ data, onSearch, sectionTitle, emptyText, styles, isDisabl
   };
 
   const handleClear = () => {
-    inputRef.current.clear()
+    inputRef.current.clear();
     setSelections([]);
-  }
+  };
 
   return (
-    <View style={[inputSearchStyles.container, {...styles}]}>
+    <View style={[inputSearchStyles.container, { ...styles }]}>
       <View
         style={[
           inputSearchStyles.inputContainer,
@@ -107,14 +118,13 @@ const InputSearch = ({ data, onSearch, sectionTitle, emptyText, styles, isDisabl
           onChangeText={handleInputChange}
           onSubmitEditing={handleSearch}
         />
-         <TouchableOpacity onPress={handleClear}>
+        <TouchableOpacity onPress={handleClear}>
           <Icon>
-            <Close
-              color={theme.color.disabled.onBase}
-            />
+            <Close color={theme.color.disabled.onBase} />
           </Icon>
         </TouchableOpacity>
       </View>
+      {!!initiateSearch && (
         <View style={inputSearchStyles.listContainer}>
           {selections.length > 0 ? (
             <SearchList
@@ -129,6 +139,7 @@ const InputSearch = ({ data, onSearch, sectionTitle, emptyText, styles, isDisabl
             </View>
           )}
         </View>
+      )}
     </View>
   );
 };

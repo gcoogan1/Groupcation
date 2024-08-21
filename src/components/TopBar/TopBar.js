@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+ import { View, Text } from "react-native";
 
 import { topBarStyles } from "./styles/TopBar.styles";
 import Button from "../Button/Button";
