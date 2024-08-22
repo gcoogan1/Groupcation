@@ -17,7 +17,7 @@ import { defaultInlineStyles } from "./styles/InlineButton.styles";
  * @param {svg} iconLeft optional -> displays icon (set color in icon element) to the left of text
  * @returns {ReactElement} Renders a button.
  *
- * @example  <InlineButton buttonType={"secondary"}>Click me</InlineButton>
+ * @example  <InlineButton buttonType={"secondary"} onPress={handleOnPress}>Click me</InlineButton>
  */
 const InlineButton = ({
   children,

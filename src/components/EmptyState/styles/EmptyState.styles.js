@@ -6,7 +6,7 @@ export const emptyStateStyles = StyleSheet.create({
   container:{
     ...theme.border.radius.lg,
     ...theme.border.width.lg,
-    width: 300,
+    minWidth: 300,
     paddingVertical: theme.spacing.lg,
     paddingHorizontal: theme.spacing.md,
     gap: theme.spacing.sm,

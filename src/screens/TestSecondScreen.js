@@ -5,6 +5,8 @@ import InputText from "../components/Inputs/InputText/InputText"
 import TopBar from "../components/TopBar/TopBar";
 import Dialog from "../components/Dialog/Dialog";
 import UtilityMessage from "../components/UtilityMessage/UtilityMessage";
+import Box from "../components/Box/Box";
+import EmptyState from "../components/EmptyState/EmptyState";
 
 const TestSecondScreen = () => {
   const actionButtons = {
@@ -22,7 +24,10 @@ const TestSecondScreen = () => {
 
   return (
     <View style={styles.container}>
-      <UtilityMessage  />
+
+      <Box type={"empty"} title={"Title"} pressViewAll={() => console.log("press view all")}>
+        <EmptyState text={'Empty state text'} onPress={() => console.log("click")} label={'label'} />
+      </Box>
     </View>
   );
 };
