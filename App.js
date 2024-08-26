@@ -20,6 +20,14 @@ import NameScreen from "./src/screens/UnAuth/Registation/Name/NameScreen";
 import VerificationScreen from "./src/screens/UnAuth/Registation/Verification/VerificationScreen";
 import LoginScreen from "./src/screens/UnAuth/Login/Login";
 import ResetSuccessScreen from "./src/screens/UnAuth/ResetSuccess/ResetSuccessScreen";
+import ExploreScreen from "./src/screens/Auth/Core/Explore/ExploreScreen";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Explore from "./assets/icons/Explore_Filled.svg";
+import Groups from "./assets/icons/Groups_Filled.svg";
+import Trips from "./assets/icons/Trips_Filled.svg";
+import Inbox from "./assets/icons/Inbox_Filled.svg";
+import Profile from "./assets/icons/Profile_Filled.svg";
+import BottomTab from "./src/components/BottomTab/BottomTab";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -54,45 +62,81 @@ export default function App() {
   //   );
   // };
 
-  // const BottomTabs = createBottomTabNavigator();
+  const BottomTabs = createBottomTabNavigator();
 
-  // const inActiveColor = theme.color.surface.onBaseSecondary;
-  // const activeColor = theme.color.primary.base;
-  // const disabledColor = theme.color.disabled.onBase;
+  const inActiveColor = theme.color.surface.onBaseSecondary;
+  const activeColor = theme.color.primary.base;
+  const disabledColor = theme.color.disabled.onBase;
 
-  // const BottomNavigation = () => {
-  //   return (
-  //     <BottomTabs.Navigator
-  //       sceneContainerStyle={{ backgroundColor: "#fffff" }}
-  //       tabBar={(props) => <BottomTab {...props} />}
-  //     >
-  //       <BottomTabs.Screen
-  //         component={TestSecondScreen}
-  //         name="TestSecondScreen"
-  //         options={{
-  //           tabBarLabel: "Explore",
-  //           tabBarIcon: <Explore color={inActiveColor} />,
-  //           tabBarIconSelected: <Explore color={activeColor} />,
-  //           tabBarIconDisabled: <Explore color={disabledColor} />,
-  //           isDisabled: false
-  //         }}
-  //       />
-  //       <BottomTabs.Screen
-  //         component={TestScreen}
-  //         name="TestScreen"
-  //         options={{
-  //           tabBarLabel: "Groups",
-  //           tabBarIcon: <Groups color={inActiveColor} />,
-  //           tabBarIconSelected: <Groups color={activeColor} />,
-  //           tabBarIconDisabled: <Groups color={disabledColor} />,
-  //           isDisabled: false
-  //         }}
-  //       />
-  //     </BottomTabs.Navigator>
-  //   );
-  // };
-
-  // onPress={() => navigation.navigate("Welcome")}
+  const BottomNavigation = () => {
+    return (
+      <BottomTabs.Navigator
+        sceneContainerStyle={{ backgroundColor: "#fffff" }}
+        tabBar={(props) => <BottomTab {...props} />}
+      >
+        <BottomTabs.Screen
+          component={ExploreScreen}
+          name="ExploreScreen"
+          options={{
+            tabBarLabel: "Explore",
+            headerShown: false,
+            tabBarIcon: <Explore color={inActiveColor} />,
+            tabBarIconSelected: <Explore color={activeColor} />,
+            tabBarIconDisabled: <Explore color={disabledColor} />,
+            isDisabled: false
+          }}
+        />
+        <BottomTabs.Screen
+          component={TestSecondScreen}
+          name="GroupsScreen"
+          options={{
+            tabBarLabel: "Groups",
+            headerShown: false,
+            tabBarIcon: <Groups color={inActiveColor} />,
+            tabBarIconSelected: <Groups color={activeColor} />,
+            tabBarIconDisabled: <Groups color={disabledColor} />,
+            isDisabled: false
+          }}
+        />
+        <BottomTabs.Screen
+          component={TestSecondScreen}
+          name="TripsScreen"
+          options={{
+            tabBarLabel: "Trips",
+            headerShown: false,
+            tabBarIcon: <Trips color={inActiveColor} />,
+            tabBarIconSelected: <Trips color={activeColor} />,
+            tabBarIconDisabled: <Trips color={disabledColor} />,
+            isDisabled: false
+          }}
+        />
+        <BottomTabs.Screen
+          component={TestSecondScreen}
+          name="InboxScreen"
+          options={{
+            tabBarLabel: "Inbox",
+            headerShown: false,
+            tabBarIcon: <Inbox color={inActiveColor} />,
+            tabBarIconSelected: <Inbox color={activeColor} />,
+            tabBarIconDisabled: <Inbox color={disabledColor} />,
+            isDisabled: false
+          }}
+        />
+        <BottomTabs.Screen
+          component={TestSecondScreen}
+          name="ProfileScreen"
+          options={{
+            tabBarLabel: "Profile",
+            headerShown: false,
+            tabBarIcon: <Profile color={inActiveColor} />,
+            tabBarIconSelected: <Profile color={activeColor} />,
+            tabBarIconDisabled: <Profile color={disabledColor} />,
+            isDisabled: false
+          }}
+        />
+      </BottomTabs.Navigator>
+    );
+  };
 
   const UnAuthenticatedStack = () => {
     return (
@@ -194,15 +238,16 @@ export default function App() {
 
   const AuthenticatedStack = () => {
     return (
-      <Stack.Navigator>
-        <Stack.Screen
-          name="home"
-          component={TestSecondScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
+      <BottomNavigation />
+      // <Stack.Navigator>
+      //   <Stack.Screen
+      //     name="home"
+      //     component={ExploreScreen}
+      //     options={{
+      //       headerShown: false,
+      //     }}
+      //   />
+      // </Stack.Navigator>
     );
   };
 
@@ -211,8 +256,8 @@ export default function App() {
 
     return (
       <NavigationContainer theme={MyTheme}>
-        {!authContext.isAuth && <UnAuthenticatedStack />}
-        {!!authContext.isAuth && <AuthenticatedStack />}
+        {!!authContext.isAuth && <UnAuthenticatedStack />}
+        {!authContext.isAuth && <AuthenticatedStack />}
       </NavigationContainer>
     );
   };
