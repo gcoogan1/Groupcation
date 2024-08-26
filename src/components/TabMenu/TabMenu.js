@@ -2,13 +2,15 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 
 import { theme } from "../../styles/theme";
 
+//TODO: Fix tabar item style to be smaller
+
 /**
  * This component renders a tab menu with screen options to navigate to.
- * @prop {object} tabScreens required -> object containing screens that can be navigated to in the tab
- * ex. const screens = {
+ * @prop {array} tabScreens required -> array of objects containing screens that can be navigated to in the tab
+ * ex. const screens = [
  * { name: 'test', component: TestScreen },
  * { name: 'test Two', component: TestSecondScreen }
- * }
+ * ]
  * @returns {ReactElement} Renders a tab menu.
  *
  * @important Component MUST be wrapped inside NavigationContainer to work
@@ -48,9 +50,9 @@ const TabMenu = ({ tabScreens }) => {
           tabBarIndicatorContainerStyle: {
             marginHorizontal: theme.spacing.sm,
           },
-          tabBarItemStyle: {
-            width: 73 
-          },
+          // tabBarItemStyle: {
+          //   width: 73
+          // },
         }}
       >
         {tabScreens.map((screen) => {
