@@ -28,6 +28,7 @@ import Trips from "./assets/icons/Trips_Filled.svg";
 import Inbox from "./assets/icons/Inbox_Filled.svg";
 import Profile from "./assets/icons/Profile_Filled.svg";
 import BottomTab from "./src/components/BottomTab/BottomTab";
+import GroupsScreen from "./src/screens/Auth/Core/Groups/GroupsScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -87,7 +88,7 @@ export default function App() {
           }}
         />
         <BottomTabs.Screen
-          component={TestSecondScreen}
+          component={GroupsScreen}
           name="GroupsScreen"
           options={{
             tabBarLabel: "Groups",
