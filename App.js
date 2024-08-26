@@ -29,6 +29,8 @@ import Inbox from "./assets/icons/Inbox_Filled.svg";
 import Profile from "./assets/icons/Profile_Filled.svg";
 import BottomTab from "./src/components/BottomTab/BottomTab";
 import GroupsScreen from "./src/screens/Auth/Core/Groups/GroupsScreen";
+import TripsScreen from "./src/screens/Auth/Core/Trips/TripsScreen";
+import TopBar from "./src/components/TopBar/TopBar";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -84,7 +86,7 @@ export default function App() {
             tabBarIcon: <Explore color={inActiveColor} />,
             tabBarIconSelected: <Explore color={activeColor} />,
             tabBarIconDisabled: <Explore color={disabledColor} />,
-            isDisabled: false
+            isDisabled: false,
           }}
         />
         <BottomTabs.Screen
@@ -96,19 +98,26 @@ export default function App() {
             tabBarIcon: <Groups color={inActiveColor} />,
             tabBarIconSelected: <Groups color={activeColor} />,
             tabBarIconDisabled: <Groups color={disabledColor} />,
-            isDisabled: false
+            isDisabled: false,
           }}
         />
         <BottomTabs.Screen
-          component={TestSecondScreen}
+          component={TripsScreen}
           name="TripsScreen"
           options={{
             tabBarLabel: "Trips",
-            headerShown: false,
             tabBarIcon: <Trips color={inActiveColor} />,
             tabBarIconSelected: <Trips color={activeColor} />,
             tabBarIconDisabled: <Trips color={disabledColor} />,
-            isDisabled: false
+            isDisabled: false,
+            header: () => {
+              return (
+                <TopBar
+                  onButtonPress={() => console.log("click plus")}
+                  title={"Trips"}
+                />
+              );
+            },
           }}
         />
         <BottomTabs.Screen
@@ -120,7 +129,7 @@ export default function App() {
             tabBarIcon: <Inbox color={inActiveColor} />,
             tabBarIconSelected: <Inbox color={activeColor} />,
             tabBarIconDisabled: <Inbox color={disabledColor} />,
-            isDisabled: false
+            isDisabled: false,
           }}
         />
         <BottomTabs.Screen
@@ -132,7 +141,7 @@ export default function App() {
             tabBarIcon: <Profile color={inActiveColor} />,
             tabBarIconSelected: <Profile color={activeColor} />,
             tabBarIconDisabled: <Profile color={disabledColor} />,
-            isDisabled: false
+            isDisabled: false,
           }}
         />
       </BottomTabs.Navigator>
