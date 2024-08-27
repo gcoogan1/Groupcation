@@ -1,4 +1,4 @@
- import { View, Text } from "react-native";
+import { View, Text } from "react-native";
 
 import { topBarStyles } from "./styles/TopBar.styles";
 import Button from "../Button/Button";
@@ -8,7 +8,7 @@ import { theme } from "../../styles/theme";
 
 /**
  * This component renders a top bar that contains with a searchInput/title with an add button.
- * @prop {function} onButtonPress required -> event to be fire when add button is pressed
+ * @prop {function} onButtonPress optional -> event to be fire when add button is pressed
  * @prop {boolean} isSearch optional -> if true, displays search input instead of title
  * @prop {array} searchData optional (req if isSearch) -> array of objects containing the search list of suggestions. 
  * @prop {function} onSearch optional (req if isSearch) -> event to be fired when search is pressed
@@ -54,14 +54,16 @@ const TopBar = ({
           <Text style={topBarStyles.title}>{title}</Text>
         )}
       </View>
-      <View>
-        <Button
-          buttonSize={"sm"}
-          onPress={onButtonPress}
-          buttonType={"primary"}
-          iconLeft={<Add color={theme.color.primary.onBase} />}
-          styles={{ gap: 0, padding: theme.spacing.md, marginTop: 2 }}
-        />
+      <View style={{ height: 36 }}>
+        {onButtonPress && (
+          <Button
+            buttonSize={!isSearch ? "sm" : '"md'}
+            onPress={onButtonPress}
+            buttonType={"primary"}
+            iconLeft={<Add color={theme.color.primary.onBase} />}
+            styles={{ gap: 0, marginTop: 2 }}
+          />
+        )}
       </View>
     </View>
   );
