@@ -1,8 +1,7 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import { theme } from "../../styles/theme";
-
-//TODO: Fix tabar item style to be smaller
+import CustomTabBar from "./CustomTabBar/CustomTabBar";
 
 /**
  * This component renders a tab menu with screen options to navigate to.
@@ -29,6 +28,7 @@ const TabMenu = ({ tabScreens }) => {
   return (
     <>
       <Tab.Navigator
+        tabBar={props => <CustomTabBar {...props} />}
         screenOptions={{
           tabBarActiveTintColor: theme.color.primary.base,
           tabBarInactiveTintColor: theme.color.surface.onBaseSecondary,
@@ -40,20 +40,33 @@ const TabMenu = ({ tabScreens }) => {
             borderBottomColor: theme.color.surface.line,
           },
           tabBarPressColor: "transparent",
-          tabBarIndicatorStyle: {
-            backgroundColor: theme.color.primary.base,
-            height: 4,
-            borderTopStartRadius: 99,
-            borderTopEndRadius: 99,
-            
-          },
-          tabBarIndicatorContainerStyle: {
-            marginHorizontal: theme.spacing.sm,
-          },
-          // tabBarItemStyle: {
-          //   width: 73
-          // },
         }}
+        // screenOptions={{
+        //   tabBarActiveTintColor: theme.color.primary.base,
+        //   tabBarInactiveTintColor: theme.color.surface.onBaseSecondary,
+        //   tabBarLabelStyle: { ...theme.typeography.body.mdBold },
+        //   tabBarStyle: {
+        //     padding: theme.spacing.sm,
+        //     ...theme.border.radius.sm,
+        //     borderBottomWidth: 1,
+        //     borderBottomColor: theme.color.surface.line,
+        //   },
+        //   tabBarPressColor: "transparent",
+        //   tabBarIndicatorStyle: {
+        //     backgroundColor: theme.color.primary.base,
+        //     height: 4,
+        //     borderTopStartRadius: 99,
+        //     borderTopEndRadius: 99,
+        //     width: 73,
+        //   },
+        //   tabBarIndicatorContainerStyle: {
+        //     marginHorizontal: theme.spacing.sm, 
+        //     justifyContent: 'center',
+        //   },
+        //   // tabBarItemStyle: {
+        //   //   width: 73
+        //   // },
+        // }}
       >
         {tabScreens.map((screen) => {
           return (
