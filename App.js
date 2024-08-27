@@ -31,6 +31,7 @@ import BottomTab from "./src/components/BottomTab/BottomTab";
 import GroupsScreen from "./src/screens/Auth/Core/Groups/GroupsScreen";
 import TripsScreen from "./src/screens/Auth/Core/Trips/TripsScreen";
 import TopBar from "./src/components/TopBar/TopBar";
+import InboxScreen from "./src/screens/Auth/Core/Inbox/InboxScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -121,15 +122,21 @@ export default function App() {
           }}
         />
         <BottomTabs.Screen
-          component={TestSecondScreen}
+          component={InboxScreen}
           name="InboxScreen"
           options={{
             tabBarLabel: "Inbox",
-            headerShown: false,
             tabBarIcon: <Inbox color={inActiveColor} />,
             tabBarIconSelected: <Inbox color={activeColor} />,
             tabBarIconDisabled: <Inbox color={disabledColor} />,
             isDisabled: false,
+            header: () => {
+              return (
+                <TopBar
+                  title={"Inbox"}
+                />
+              );
+            },
           }}
         />
         <BottomTabs.Screen
