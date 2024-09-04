@@ -26,6 +26,7 @@ export const boxStyles = StyleSheet.create({
   profile: {
     paddingVertical: theme.spacing.lg,
     paddingHorizontal: theme.spacing.md,
+    alignItems: 'center'
   },
   note: {
     padding: theme.spacing.md,
