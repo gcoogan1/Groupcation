@@ -32,6 +32,7 @@ import GroupsScreen from "./src/screens/Auth/Core/Groups/GroupsScreen";
 import TripsScreen from "./src/screens/Auth/Core/Trips/TripsScreen";
 import TopBar from "./src/components/TopBar/TopBar";
 import InboxScreen from "./src/screens/Auth/Core/Inbox/InboxScreen";
+import ProfileScreen from "./src/screens/Auth/Core/Profile/ProfileScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -140,7 +141,7 @@ export default function App() {
           }}
         />
         <BottomTabs.Screen
-          component={TestSecondScreen}
+          component={ProfileScreen}
           name="ProfileScreen"
           options={{
             tabBarLabel: "Profile",

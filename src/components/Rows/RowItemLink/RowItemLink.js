@@ -4,13 +4,14 @@ import Icon from "../../Icon/Icon";
 import ChevronRight from "../../../../assets/icons/Chevron_Right.svg";
 import { theme } from "../../../styles/theme";
 import { rowItemLinkStyles } from "./styles/RowItemLink.styles";
-import { capitilaizeFirstLetter } from "../../../../util/helperFunctions/helperFunctions";
+import { capitilaizeFirstLetter } from "../../../util/helperFunctions/helperFunctions";
 import RowItemLinkConstants from "./constants/RowItemLink.constants";
 
 /**
  * This component renders a row item that inludes an icon and text.
  * @prop {string} type required -> type of row item link (basic, activity, user, notification, message, avatars)
  * @prop {string} label required -> text for label
+ * @prop {function} linkOnPress required -> event to be fired when item link is pressed
  * @prop {string} subLabel optional -> text for subLabel
  * @prop {svg} icon optional -> icon to be displayed
  * @prop {component} user optional -> avatar to be displayed in place of icon
@@ -27,6 +28,7 @@ import RowItemLinkConstants from "./constants/RowItemLink.constants";
  * @example
  * <RowItemLink
     type={'avatars'}
+    linkOnPress={() => console.log("navigate")}
     label={"label"}
     subLabel={"sub-label"}
     avatars={<AvatarStack users={users}  />}
@@ -35,6 +37,7 @@ import RowItemLinkConstants from "./constants/RowItemLink.constants";
 const RowItemLink = ({
   type,
   label,
+  linkOnPress,
   subLabel,
   icon,
   user,
@@ -58,6 +61,7 @@ const RowItemLink = ({
             pressed && rowItemLinkStyles.pressedContentContainer,
             focused && rowItemLinkStyles.focusedContentContainer,
           ]}
+          onPress={linkOnPress}
         >
           <View style={rowItemLinkStyles.iconContainer}>
             {!!icon && <Icon>{icon}</Icon>}
