@@ -26,7 +26,7 @@ import { getButtonStyle, getTextStyle, getDisplayIcon } from "./util/util";
  *  buttonSize={'sm'}
  *  onPress={() => console.log("Pressed!")}
  *  buttonType={'default-inverse'}
- *  iconRight={<Add color={theme.color.surface} />}
+ *  iconRight={<Add color={theme.color.surface.onBasePrimary} />}
  * >
  *  Click me
  * </Button>

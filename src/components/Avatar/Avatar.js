@@ -10,7 +10,7 @@ import { theme } from "../../styles/theme";
  * This component renders an avatar with either a image or initials. If no props are passed
  * the default will be a md avatar with the initials AZ.
  * @prop {image} avatarImage optional -> users image (link) to be displayed. Must have uri format.
- * @prop {string} size optional -> sm, md, lg, xl, 2x (defaults to md)
+ * @prop {string} size optional -> sm, md, lg, xl, 2x, or profile (defaults to md)
  * @prop {string} initials optional -> users initials (limit to two characters)
  * @prop {string} numOfUsers optional -> displays the number of students left
  * @returns {ReactElement} Renders an avatar.
@@ -19,7 +19,7 @@ import { theme } from "../../styles/theme";
  * @note NumOfUsers should only be sizes sm or md (defaults to md)
  * @example <Avatar avatarImage={{ uri: 'https:link/to/image.com' }} size="2xl" />
  */
-const Avatar = ({ avatarImage, size, initials, numOfUsers }) => {
+const Avatar = ({ avatarImage, size, initials, numOfUsers, styles }) => {
   const formatedInitials = !!initials
     ? initials.toUpperCase().slice(0, 2)
     : "AZ";
@@ -34,6 +34,7 @@ const Avatar = ({ avatarImage, size, initials, numOfUsers }) => {
               ? AvatarConstants.AVATAR_SIZES_STYLE[size]
               : AvatarConstants.AVATAR_SIZES_STYLE["md"],
             avatarStyles.image,
+            styles
           ]}
           resizeMode="center"
         />

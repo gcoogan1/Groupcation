@@ -23,7 +23,7 @@ const GroupsScreen = () => {
   const handleCreateGroup = () => {
     console.log("create a group");
   };
-
+  
   return (
     <ScrollView>
       <TopBar
