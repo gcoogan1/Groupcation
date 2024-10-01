@@ -21,6 +21,10 @@ const AVATAR_SIZES_STYLE = {
   '2xl': {
     width: 98,
     height: 98
+  },
+  'profile': {
+    width: 220,
+    height: 160
   }
 }
 

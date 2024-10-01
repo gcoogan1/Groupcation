@@ -33,6 +33,8 @@ import TripsScreen from "./src/screens/Auth/Core/Trips/TripsScreen";
 import TopBar from "./src/components/TopBar/TopBar";
 import InboxScreen from "./src/screens/Auth/Core/Inbox/InboxScreen";
 import ProfileScreen from "./src/screens/Auth/Core/Profile/ProfileScreen";
+import ProfileModal from "./src/modals/User/Profile/ProfileModal";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -53,19 +55,21 @@ export default function App() {
   };
 
   const Stack = createNativeStackNavigator();
-  // const TopTabs = createMaterialTopTabNavigator();
+  const TopTabs = createMaterialTopTabNavigator();
 
-  // const TopNavigation = () => {
-  //   return (
-  //     <TopTabs.Navigator
-  //       sceneContainerStyle={{ backgroundColor: "#fffff" }}
-  //       //  tabBar={(props) => <Navbar type={'userInput'} pageTitle={'Input Title'} {...props} />}
-  //     >
-  //       {/* <TopTabs.Screen component={TestScreen} name="UserInputScreen" /> */}
-  //       <TopTabs.Screen component={TestSecondScreen} name="TestScreen" />
-  //     </TopTabs.Navigator>
-  //   );
-  // };
+  const TopNavigation = () => {
+    return (
+      <TopTabs.Navigator
+        sceneContainerStyle={{ backgroundColor: "#fffff" }}
+        tabBar={(props) => (
+          <Navbar type={"back"} {...props} onBackPress={() => props.navigation.goBack()} />
+        )}
+      >
+        {/* <TopTabs.Screen component={GroupsScreen} name="ProfileModal" /> */}
+        <TopTabs.Screen component={ProfileModal} name="EditModal" />
+      </TopTabs.Navigator>
+    );
+  };
 
   const BottomTabs = createBottomTabNavigator();
 
@@ -132,11 +136,7 @@ export default function App() {
             tabBarIconDisabled: <Inbox color={disabledColor} />,
             isDisabled: false,
             header: () => {
-              return (
-                <TopBar
-                  title={"Inbox"}
-                />
-              );
+              return <TopBar title={"Inbox"} />;
             },
           }}
         />
@@ -255,17 +255,26 @@ export default function App() {
   };
 
   const AuthenticatedStack = () => {
+    const authContext = useContext(AuthContext);
+    console.log("auth", authContext);
+    
     return (
-      <BottomNavigation />
-      // <Stack.Navigator>
-      //   <Stack.Screen
-      //     name="home"
-      //     component={ExploreScreen}
-      //     options={{
-      //       headerShown: false,
-      //     }}
-      //   />
-      // </Stack.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="BottomNavigation"
+          component={BottomNavigation}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="TopNavigation"
+          component={TopNavigation}
+        />
+      </Stack.Navigator>
     );
   };
 
@@ -274,8 +283,8 @@ export default function App() {
 
     return (
       <NavigationContainer theme={MyTheme}>
-        {!!authContext.isAuth && <UnAuthenticatedStack />}
-        {!authContext.isAuth && <AuthenticatedStack />}
+        {!authContext.isAuth && <UnAuthenticatedStack />}
+        {!!authContext.isAuth && <AuthenticatedStack />}
       </NavigationContainer>
     );
   };

@@ -6,7 +6,12 @@ import { profileScreenStyles } from "./styles/ProfileScreen.styles";
 import RowList from "../../../../components/Rows/RowList/RowList";
 import RowItemLink from "../../../../components/Rows/RowItemLink/RowItemLink";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
+
+  const handleEditProfile = () => {
+    navigation.navigate('TopNavigation', { screen: 'EditModal' });
+  }
+
   return (
     <View>
       <View style={profileScreenStyles.container}>
@@ -44,7 +49,7 @@ const ProfileScreen = () => {
            showDivider
            label={"Edit Profile"}
            subLabel={"Name, Location, and Photo"}
-           linkOnPress={() => console.log("navigate to edit")}
+           linkOnPress={() => handleEditProfile()}
           />
           <RowItemLink
            type="basic"
