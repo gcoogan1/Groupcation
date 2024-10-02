@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import {
   useFonts,
@@ -7,6 +7,7 @@ import {
 } from "@expo-google-fonts/rubik";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import AuthContextProvider, { AuthContext } from "./src/state/authContext";
 import Onboarding from "./src/screens/UnAuth/Onboarding/Onboarding";
@@ -33,6 +34,7 @@ import TripsScreen from "./src/screens/Auth/Core/Trips/TripsScreen";
 import TopBar from "./src/components/TopBar/TopBar";
 import InboxScreen from "./src/screens/Auth/Core/Inbox/InboxScreen";
 import ProfileScreen from "./src/screens/Auth/Core/Profile/ProfileScreen";
+import { Text } from "react-native";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -269,7 +271,7 @@ export default function App() {
     );
   };
 
-  const Root = () => {
+  const Navigation = () => {
     const authContext = useContext(AuthContext);
 
     return (
@@ -279,6 +281,27 @@ export default function App() {
       </NavigationContainer>
     );
   };
+
+  const Root = () => {
+    const [attemptLogin, setAttemptLogin] = useState(true);
+    const authContext = useContext(AuthContext);
+  
+    useEffect(() => {
+      const fetchToken = async () => {
+        const storedToken = await AsyncStorage.getItem('token')
+        if (storedToken) {
+          authContext.authenticate(storedToken)
+        }
+        setAttemptLogin(false)
+      }
+      fetchToken()
+    },[])
+  
+    if (attemptLogin) {
+      return <Text>Loading</Text>
+    }
+    return <Navigation />
+  }
 
   return (
     <UserContextProvider>
