@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { signOutUser } from "../util/firebase/firebaseServices";
 
 export const AuthContext = createContext({
   token: '',
@@ -17,7 +18,8 @@ const AuthContextProvider = ({ children }) => {
     AsyncStorage.setItem('token', token)
   }
 
-  const logout = () => {
+  const logout = async() => {
+    await signOutUser()
     setAuthToken(null)
     AsyncStorage.removeItem('token')
   }

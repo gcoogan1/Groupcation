@@ -2,8 +2,11 @@ import { useReducer, useContext } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { UserContext } from "../userContext";
-import UserPool from "../../util/aws/cognito/cognito"
-import { isPasswordValid, removeWhitespace } from "../../util/helperFunctions/helperFunctions";
+import {
+  isPasswordValid,
+  removeWhitespace,
+} from "../../util/helperFunctions/helperFunctions";
+import { signUpAndStoreUser } from "../../util/firebase/firebaseServices";
 
 const initialState = {
   enteredPassword: "",
@@ -51,7 +54,7 @@ const usePasswordContext = () => {
   const setInvalidInput = () => {
     dispatch({ type: "SET_LOADING", payload: false });
     dispatch({ type: "SET_PASSWORD_VALIDITY", payload: false });
-  }
+  };
 
   // BUTTON CONTENT
   const invalidButtons = {
@@ -65,13 +68,14 @@ const usePasswordContext = () => {
     },
   };
 
-  // MODAL CONTENT  
+  // MODAL CONTENT
   const setInvalidPasswordModal = () => {
     dispatch({
       type: "SET_MODAL_CONTENT",
       payload: {
         title: "Invalid Password",
-        subTitle: "Password does not meet minimum requirements. Please try again.",
+        subTitle:
+          "Password does not meet minimum requirements. Please try again.",
         buttons: invalidButtons,
       },
     });
@@ -83,7 +87,7 @@ const usePasswordContext = () => {
       payload: {
         title: "No Password Entered",
         subTitle: "Please create a password.",
-        buttons: invalidButtons
+        buttons: invalidButtons,
       },
     });
   };
@@ -91,45 +95,63 @@ const usePasswordContext = () => {
   // INPUT HANDLERS
   const updateInputValueHandler = (enteredVal) => {
     const formatedVal = removeWhitespace(enteredVal);
-    
+
     userContext.updateUser("password", formatedVal);
     dispatch({ type: "UPDATE_INPUT", payload: enteredVal });
   };
 
+  // AWS Cognito Signup
+  // const signUpHandler = async () => {
+  //   try {
+  //     const { email, firstName, lastName, password } = userContext.user
+  //     UserPool.signUp(email, password, [{ Name: 'name', Value: `${firstName} ${lastName}` }], null, (err, data) => {
+  //       if (err) {
+  //         console.log("ERROR", err);
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.log("ERROR Try", error);
+  //   }
+  // }
+
+  // Firebase Signup
   const signUpHandler = async () => {
     try {
-      const { email, firstName, lastName, password } = userContext.user
-      UserPool.signUp(email, password, [{ Name: 'name', Value: `${firstName} ${lastName}` }], null, (err, data) => {
-        if (err) {
-          console.log("ERROR", err);
-        }
-      })
+      const { email, firstName, lastName, password } = userContext.user;
+      const response = await signUpAndStoreUser(
+        email,
+        firstName,
+        lastName,
+        password
+      );
+
+      if (response.status === 200) return response.message;
     } catch (error) {
-      console.log("ERROR Try", error);
+      return error;
     }
-  }
+  };
 
   const navigateToNextScreen = async () => {
     dispatch({ type: "SET_LOADING", payload: true });
 
     if (passwordState.enteredPassword.length === 0) {
-      setEmptyPasswordModal()
-      setInvalidInput()
+      setEmptyPasswordModal();
+      setInvalidInput();
       return;
     }
 
-    const isValid = isPasswordValid(passwordState.enteredPassword)
+    const isValid = isPasswordValid(passwordState.enteredPassword);
 
     if (!isValid) {
       setInvalidPasswordModal();
-      setInvalidInput()
+      setInvalidInput();
       return;
     }
 
     dispatch({ type: "SET_PASSWORD_VALIDITY", payload: true });
     dispatch({ type: "SET_LOADING", payload: false });
     if (route?.params?.isResetPassword) {
-      navigation.navigate("ResetSuccess")
+      navigation.navigate("ResetSuccess");
       return;
     }
     signUpHandler();

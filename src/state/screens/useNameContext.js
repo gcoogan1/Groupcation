@@ -45,10 +45,10 @@ const useNameContext = () => {
   const handleAcknowledgeButton = () => {
     closeModal();
     if (!nameState.credentialsInvalid.firstName.isValid) {
-      dispatch({ type: "UPDATE_INPUT", payload: { enteredFirstName: '' } });
+      dispatch({ type: "UPDATE_INPUT", payload: { firstName: '' } });
     }
     if (!nameState.credentialsInvalid.lastName.isValid) {
-      dispatch({ type: "UPDATE_INPUT", payload: { enteredLastName: '' } });
+      dispatch({ type: "UPDATE_INPUT", payload: { lastName: '' } });
     }
   };
 
@@ -69,7 +69,11 @@ const useNameContext = () => {
     const formattedVal = removeWhitespace(enteredVal);
 
     dispatch({ type: "UPDATE_INPUT", payload: { inputType, value: formattedVal } });
-    userContext.updateUser(inputType, formattedVal);
+    if (inputType === "enteredFirstName") {
+      return userContext.updateUser("firstName", formattedVal);
+    }
+
+    return userContext.updateUser("lastName", formattedVal);
   };
 
   const clearInputHandler = (inputType) => {

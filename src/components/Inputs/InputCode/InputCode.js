@@ -69,14 +69,15 @@ const InputCode = ({ inputName, inputLabel, isDisabled, isValid, onUpdateValue }
             ]}
           >
             <TextInput
-              maxLength={6}
+              maxLength={4}
+              minLength={4}
               ref={inputRef}
               keyboardType="numeric"
               style={[
                 inputCodeStyles.input,
                 isDisabled && inputCodeStyles.inputDisabled,
               ]}
-              placeholder={"000000"}
+              placeholder={"0000"}
               onBlur={handleBlur}
               onFocus={handleFocus}
               onChangeText={(e) => {

@@ -1,5 +1,7 @@
 import { Text, View } from "react-native";
+import { useContext } from "react";
 
+import { AuthContext } from "../../../../state/authContext";
 import Box from "../../../../components/Box/Box";
 import Avatar from "../../../../components/Avatar/Avatar";
 import { profileScreenStyles } from "./styles/ProfileScreen.styles";
@@ -7,6 +9,8 @@ import RowList from "../../../../components/Rows/RowList/RowList";
 import RowItemLink from "../../../../components/Rows/RowItemLink/RowItemLink";
 
 const ProfileScreen = () => {
+  const authContext = useContext(AuthContext);
+
   return (
     <View>
       <View style={profileScreenStyles.container}>
@@ -57,7 +61,7 @@ const ProfileScreen = () => {
            type="basic"
            showDivider
            label={"Logout"}
-           linkOnPress={() => console.log("logout user")}
+           linkOnPress={() => authContext.logout()}
           />
         </RowList>
       </View>

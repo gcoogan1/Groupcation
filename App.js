@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import {
   useFonts,
   Rubik_400Regular,
@@ -7,7 +7,7 @@ import {
 } from "@expo-google-fonts/rubik";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import AuthContextProvider, { AuthContext } from "./src/state/authContext";
 import Onboarding from "./src/screens/UnAuth/Onboarding/Onboarding";
@@ -34,7 +34,17 @@ import TripsScreen from "./src/screens/Auth/Core/Trips/TripsScreen";
 import TopBar from "./src/components/TopBar/TopBar";
 import InboxScreen from "./src/screens/Auth/Core/Inbox/InboxScreen";
 import ProfileScreen from "./src/screens/Auth/Core/Profile/ProfileScreen";
-import { Text } from "react-native";
+
+import { enableScreens } from 'react-native-screens';
+enableScreens();
+
+
+import { collection, getDocs } from "firebase/firestore";
+import { UserContext } from "./src/state/userContext";
+import {
+  checkEmailExists,
+  getCurrentUserId,
+} from "./src/util/aws/cognito/idServiceProvider";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -53,6 +63,7 @@ export default function App() {
       background: "#ffffff",
     },
   };
+
 
   const Stack = createNativeStackNavigator();
   // const TopTabs = createMaterialTopTabNavigator();
@@ -74,6 +85,33 @@ export default function App() {
   const inActiveColor = theme.color.surface.onBaseSecondary;
   const activeColor = theme.color.primary.base;
   const disabledColor = theme.color.disabled.onBase;
+
+  // const fetchData = async () => {
+  //   try {
+  //     const querySnapshot = await getDocs(collection(db, "users"));
+  //     querySnapshot.forEach((doc) => {
+  //       console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+  //     });
+  //   } catch (error) {
+  //     console.error("Error fetching documents: ", error);
+  //   }
+  // };
+
+  // fetchData()
+
+  // const fetchUser = async () => {
+  //   try {
+  //     const userId = await getCurrentUserId(email); // Replace with the actual user's email
+  //     console.log("Logged in user's ID:", userId);
+  //     console.log(firstName);
+      
+  //     firestoreDB.addUser(userId, "gen", "coogan", "gcoogan1@gmail.com")
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
+
+  // firestoreDB.updateUser('p3iDp1IJ2pgS3KKWnjTP', "genevieve", "coogan", "gcoogan1@gmail.com", "Phila", "US")
 
   const BottomNavigation = () => {
     return (
@@ -134,11 +172,7 @@ export default function App() {
             tabBarIconDisabled: <Inbox color={disabledColor} />,
             isDisabled: false,
             header: () => {
-              return (
-                <TopBar
-                  title={"Inbox"}
-                />
-              );
+              return <TopBar title={"Inbox"} />;
             },
           }}
         />
@@ -276,8 +310,8 @@ export default function App() {
 
     return (
       <NavigationContainer theme={MyTheme}>
-        {!!authContext.isAuth && <UnAuthenticatedStack />}
-        {!authContext.isAuth && <AuthenticatedStack />}
+        {!authContext.isAuth && <UnAuthenticatedStack />}
+        {!!authContext.isAuth && <AuthenticatedStack />}
       </NavigationContainer>
     );
   };
@@ -285,23 +319,23 @@ export default function App() {
   const Root = () => {
     const [attemptLogin, setAttemptLogin] = useState(true);
     const authContext = useContext(AuthContext);
-  
-    useEffect(() => {
-      const fetchToken = async () => {
-        const storedToken = await AsyncStorage.getItem('token')
-        if (storedToken) {
-          authContext.authenticate(storedToken)
-        }
-        setAttemptLogin(false)
-      }
-      fetchToken()
-    },[])
-  
-    if (attemptLogin) {
-      return <Text>Loading</Text>
-    }
-    return <Navigation />
-  }
+
+    // useEffect(() => {
+    //   const fetchToken = async () => {
+    //     const storedToken = await AsyncStorage.getItem("token");
+    //     if (storedToken) {
+    //       authContext.authenticate(storedToken);
+    //     }
+    //     setAttemptLogin(false);
+    //   };
+    //   fetchToken();
+    // }, []);
+
+    // if (attemptLogin) {
+    //   return <Text>Loading</Text>;
+    // }
+    return <Navigation />;
+  };
 
   return (
     <UserContextProvider>

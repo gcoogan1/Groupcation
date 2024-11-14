@@ -11,7 +11,7 @@ export const navBarStyles = StyleSheet.create({
     // paddingHorizontal: theme.spacing.md,
   },
   contentContainer: {
-    paddingTop: 56,
+    // paddingTop: 56,
     paddingBottom: theme.spacing.md,
     paddingHorizontal: theme.spacing.md,
     flexDirection: "row",

@@ -47,6 +47,7 @@ const Button = ({
   const typeTextStyle = getTextStyle(buttonType, isDisabled);
   return (
     <Pressable
+    hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       style={({ pressed, focused }) => [
         defaultButtonStyles.button,
         getButtonStyle(buttonType, buttonSize, pressed, isDisabled),

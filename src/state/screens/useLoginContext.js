@@ -2,13 +2,14 @@ import { useReducer, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 
-import { AuthContext} from "../authContext"
-import UserPool from "../../util/aws/cognito/cognito";
+import { AuthContext } from "../authContext";
 import loginConstants from "../../screens/UnAuth/Login/constants/Login.constants";
+import { loginUser } from "../../util/firebase/firebaseServices";
+import { UserContext } from "../userContext";
 
 const initialState = {
-  email:'',
-  password: '',
+  email: "",
+  password: "",
   credentialsInvalid: {
     email: { isValid: true, errorMessage: "" },
     password: { isValid: true, errorMessage: "" },
@@ -38,6 +39,7 @@ const reducer = (authState, action) => {
 const useLoginContext = () => {
   const [authState, dispatch] = useReducer(reducer, initialState);
   const navigation = useNavigation();
+  const userContext = useContext(UserContext);
   const authContext = useContext(AuthContext);
 
   const { ERROR_MODALS } = loginConstants;
@@ -61,15 +63,15 @@ const useLoginContext = () => {
   const clearEmailInput = (inputType) => {
     dispatch({
       type: "UPDATE_INPUT",
-      payload: { inputType, value: '' },
+      payload: { inputType, value: "" },
     });
-  }
+  };
 
   const navigateToConfirm = () => {
     closeModal();
     setInvalidInput(false);
-    navigation.navigate('Verification');
-  }
+    navigation.navigate("Verification");
+  };
 
   // BUTTON CONTENT
   const invalidButtons = {
@@ -92,7 +94,7 @@ const useLoginContext = () => {
         isLoading: authState.isLoading,
       },
     },
-  }
+  };
 
   // MODAL CONTENT
   const setContentModal = (type) => {
@@ -100,14 +102,14 @@ const useLoginContext = () => {
       type: "SET_MODAL_CONTENT",
       payload: {
         ...ERROR_MODALS[type],
-        buttons:
-          type === "notVerified" ? confimAccountButtons : invalidButtons,
+        buttons: type === "notVerified" ? confimAccountButtons : invalidButtons,
       },
     });
   };
 
   // INPUT HANDLERS
   const updateInputValueHandler = (inputType, enteredVal) => {
+    userContext.updateUser(inputType, enteredVal);
     dispatch({
       type: "UPDATE_INPUT",
       payload: { inputType, value: enteredVal },
@@ -116,38 +118,33 @@ const useLoginContext = () => {
 
   const loginHandler = async () => {
     try {
-      const user = new CognitoUser({
-        Username: authState.email,
-        Pool: UserPool,
-      });
+      const response = await loginUser(authState.email, authState.password);
+      const { status } = response;
 
-      const authDetails = new AuthenticationDetails({
-        Username: authState.email,
-        Password: authState.password,
-      });
+      // SUCCESS
+      if (status === 200) {
+        authContext.authenticate(response.data);
+        setInvalidInput(true);
+        return;
+      }
 
-      
-      user.authenticateUser(authDetails, {
-        onSuccess: (data) => {
-          const accessToken = data.getAccessToken().getJwtToken();
-          authContext.authenticate(accessToken);
+      // ERRORS
+      if (status === 404) {
+        setContentModal("notVerified");
+        return;
+      }
 
-          setInvalidInput(true);
-        },
-        onFailure: (err) => {
-          if (err.code === 'UserNotConfirmedException') {
-            setContentModal('notVerified')
-            return
-          } 
-          console.log("err", err)
-          setContentModal('incorrectCreds')
-          setInvalidInput(false);
-          return
-        },
-      });
+      if (status === 400) {
+        setContentModal("incorrectCreds");
+        setInvalidInput(false);
+        return;
+      }
+
+      setContentModal("verifyFailed");
+      return;
     } catch (error) {
-      console.err(error)
-      setContentModal("verifyFailed")
+      setContentModal("verifyFailed");
+      return;
     }
   };
 
@@ -157,7 +154,7 @@ const useLoginContext = () => {
 
     dispatch({ type: "SET_LOADING", payload: true });
     if (emailMissing || passwordMissing) {
-      setContentModal('missingCreds')
+      setContentModal("missingCreds");
       dispatch({
         type: "SET_CREDENTIALS_VALIDITY",
         payload: {
@@ -172,13 +169,13 @@ const useLoginContext = () => {
         },
       });
       dispatch({ type: "SET_LOADING", payload: false });
-      return
+      return;
     }
 
     const isValid = authState.email && authState.email.includes("@");
 
     if (!isValid) {
-      setContentModal('invalidEmail')
+      setContentModal("invalidEmail");
       dispatch({
         type: "SET_CREDENTIALS_VALIDITY",
         payload: {
@@ -204,7 +201,7 @@ const useLoginContext = () => {
     authState,
     updateInputValueHandler,
     navigateToNextScreen,
-    clearEmailInput
+    clearEmailInput,
   };
 };
 
