@@ -17,7 +17,7 @@ const Onboarding = () => {
   };
 
   const guestHandler = () => {
-    navigation.navigate("Explore");
+    navigation.navigate("ExploreScreen");
   };
 
   const onBoardingButtons = {

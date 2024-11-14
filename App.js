@@ -34,10 +34,13 @@ import TripsScreen from "./src/screens/Auth/Core/Trips/TripsScreen";
 import TopBar from "./src/components/TopBar/TopBar";
 import InboxScreen from "./src/screens/Auth/Core/Inbox/InboxScreen";
 import ProfileScreen from "./src/screens/Auth/Core/Profile/ProfileScreen";
-import { db } from "./src/util/firebase/firebaseConfig";
+
+import { enableScreens } from 'react-native-screens';
+enableScreens();
+
+
 import { collection, getDocs } from "firebase/firestore";
 import { UserContext } from "./src/state/userContext";
-import firestoreDB from "./src/util/firebase/firestoreFunctions";
 import {
   checkEmailExists,
   getCurrentUserId,
@@ -317,20 +320,20 @@ export default function App() {
     const [attemptLogin, setAttemptLogin] = useState(true);
     const authContext = useContext(AuthContext);
 
-    useEffect(() => {
-      const fetchToken = async () => {
-        const storedToken = await AsyncStorage.getItem("token");
-        if (storedToken) {
-          authContext.authenticate(storedToken);
-        }
-        setAttemptLogin(false);
-      };
-      fetchToken();
-    }, []);
+    // useEffect(() => {
+    //   const fetchToken = async () => {
+    //     const storedToken = await AsyncStorage.getItem("token");
+    //     if (storedToken) {
+    //       authContext.authenticate(storedToken);
+    //     }
+    //     setAttemptLogin(false);
+    //   };
+    //   fetchToken();
+    // }, []);
 
-    if (attemptLogin) {
-      return <Text>Loading</Text>;
-    }
+    // if (attemptLogin) {
+    //   return <Text>Loading</Text>;
+    // }
     return <Navigation />;
   };
 

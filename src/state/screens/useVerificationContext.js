@@ -4,8 +4,14 @@ import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js";
 
 import { UserContext } from "../userContext";
 import { AuthContext } from "../authContext";
-import UserPool from "../../util/aws/cognito/cognito"
+import UserPool from "../../util/aws/cognito/cognito";
 import verificationConstants from "../../screens/UnAuth/Registation/Verification/constants/verification.constants";
+import {
+  validateVerificationCode,
+  sendConfirmationEmail,
+  userIsConfirmed,
+  loginUser,
+} from "../../util/firebase/firebaseServices";
 
 const initialState = {
   enteredCode: "",
@@ -43,17 +49,12 @@ const useVerificationContext = () => {
   const [verificationState, dispatch] = useReducer(reducer, initialState);
 
   const navigation = useNavigation();
-  const route = useRoute()
+  const route = useRoute();
   const userContext = useContext(UserContext);
   const authContext = useContext(AuthContext);
 
   const { email, password } = userContext.user;
   const { ERROR_MODALS } = verificationConstants;
-
-  const user = new CognitoUser({
-    Username: email,
-    Pool: UserPool,
-  });
 
   // UTIL
   const closeModal = () => {
@@ -123,28 +124,24 @@ const useVerificationContext = () => {
     userContext.updateUser(enteredVal);
   };
 
-  const handleResendCode = () => {
+  const handleResendCode = async () => {
     dispatch({
       type: "SET_LOADING",
       payload: { isVerifiying: false, isResending: true },
     });
     try {
-      user.resendConfirmationCode((err, data) => {
-        if (err.code === "LimitExceededException") {
-          setContentModal("resendUnavailable");
-          dispatch({
-            type: "SET_LOADING",
-            payload: { isVerifiying: false, isResending: false },
-          });
-          return;
-        }
+      const resendCodeRes = await sendConfirmationEmail(email);
 
-        setContentModal("resendConfirm");
-        dispatch({
-          type: "SET_LOADING",
-          payload: { isVerifiying: false, isResending: false },
-        });
+      dispatch({
+        type: "SET_LOADING",
+        payload: { isVerifiying: false, isResending: false },
       });
+
+      if (resendCodeRes.status === 200) {
+        setContentModal("resendConfirm");
+        return;
+      }
+      return setContentModal("resendUnavailable");
     } catch (error) {
       setContentModal("resendUnavailable");
       dispatch({
@@ -154,7 +151,7 @@ const useVerificationContext = () => {
     }
   };
 
-  const navigateToNextScreen = () => {
+  const navigateToNextScreen = async () => {
     dispatch({
       type: "SET_LOADING",
       payload: { isVerifiying: true, isResending: false },
@@ -169,39 +166,57 @@ const useVerificationContext = () => {
     }
 
     try {
-      user.confirmRegistration(verificationState.enteredCode, true, function (err, result) {
-        if (err) {
-          if (route?.params?.isResetPassword && err.code === "NotAuthorizedException") {
-            navigation.navigate("Password", { isResetPassword: true })
-            return;
-          }
-          resetIsVerifiying();
-          
-          setContentModal(err.code === "CodeMismatchException" ? "incorrectCode" : "maxAttempts");
+      const userIsVerified = await userIsConfirmed(email);
+
+      if (route?.params?.isResetPassword && userIsVerified) {
+        const resetConfirmRes = await validateVerificationCode(
+          email,
+          verificationState.enteredCode,
+          "resetPasswordCodes"
+        );
+
+        if (resetConfirmRes.status === 200) {
+          navigation.navigate("Password", { isResetPassword: true });
           return;
         }
-        
+        resetIsVerifiying();
+        setContentModal(
+          signUpConfirmRes.status === 429 ? "maxAttempts" : "incorrectCode"
+        );
+        return;
+      }
 
-        const authDetails = new AuthenticationDetails({
-          Username: email,
-          Password: password,
-        });
-        
-        try {
-          user.authenticateUser(authDetails, {
-            onSuccess: (data) => {
-              const accessToken = data.getAccessToken().getJwtToken();
+      const signUpConfirmRes = await validateVerificationCode(
+        email,
+        verificationState.enteredCode,
+        "verificationCodes"
+      );
 
-              authContext.authenticate(accessToken);
-              resetIsVerifiying();
-              navigation.navigate("home");
-            },
-            onFailure: handleVerificationError,
-          });
-        } catch (error) {
-          handleVerificationError(error);
+      if (signUpConfirmRes.status === 200) {
+        if (!password) {
+          resetIsVerifiying();
+          navigation.navigate("Login");
         }
-      });
+        const loginRes = await loginUser(email, password);
+        const { status } = loginRes;
+
+        // SUCCESS
+        if (status === 200) {
+          authContext.authenticate(loginRes.data);
+          resetIsVerifiying();
+          navigation.navigate("ExploreScreen");
+          return;
+        }
+
+        handleVerificationError(loginRes);
+        return;
+      }
+
+      resetIsVerifiying();
+      setContentModal(
+        signUpConfirmRes.status === 429 ? "maxAttempts" : "incorrectCode"
+      );
+      return;
     } catch (error) {
       handleVerificationError(error);
     }

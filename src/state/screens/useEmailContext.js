@@ -8,6 +8,11 @@ import {
   isUserConfirmed,
 } from "../../util/aws/cognito/idServiceProvider";
 import UserPool from "../../util/aws/cognito/cognito";
+import {
+  userExists,
+  userIsConfirmed,
+} from "../../util/firebase/firebaseServices";
+import { sendResetPasswordCode } from "../../util/firebase/firebaseServices";
 
 const initialState = {
   enteredEmail: "",
@@ -62,7 +67,7 @@ const useEmailContext = () => {
   const navigateToConfirm = () => {
     closeModal();
     setInvalidInput(false);
-    navigation.navigate("Verification", {isResetPassword: true});
+    navigation.navigate("Verification", { isResetPassword: true });
   };
 
   const handleAcknowledgeButton = () => {
@@ -149,23 +154,20 @@ const useEmailContext = () => {
     dispatch({ type: "UPDATE_INPUT", payload: enteredVal });
   };
 
-  const forgotPasswordHandler = () => {
-    const user = new CognitoUser({
-      Username: emailState.enteredEmail,
-      Pool: UserPool,
-    });
-
+  const forgotPasswordHandler = async () => {
     try {
-      user.forgotPassword({
-        onSuccess: (result) => {
-          navigation.navigate("Verification", {isResetPassword: true});
-          dispatch({ type: "SET_LOADING", payload: false });
-        },
-        onFailure: (err) => {
-          setInvalidEmailModal();
-          setInvalidInput();
-        },
-      });
+      const resentCodeRes = await sendResetPasswordCode(
+        emailState.enteredEmail
+      );
+
+      if (resentCodeRes.status === 200) {
+        navigation.navigate("Verification", { isResetPassword: true });
+        dispatch({ type: "SET_LOADING", payload: false });
+        return;
+      }
+      setInvalidEmailModal();
+      setInvalidInput();
+      return;
     } catch (error) {
       console.error(error);
       setInvalidEmailModal();
@@ -184,9 +186,9 @@ const useEmailContext = () => {
       return;
     }
 
-    const emailAlreadyExists = await checkEmailExists(emailState.enteredEmail);
+    const emailAlreadyExists = await userExists(emailState.enteredEmail);
     if (emailAlreadyExists) {
-      const confirmedUser = await isUserConfirmed(emailState.enteredEmail);
+      const confirmedUser = await userIsConfirmed(emailState.enteredEmail);
 
       if (!confirmedUser) {
         setUserUnconfirmedModal();
@@ -195,7 +197,7 @@ const useEmailContext = () => {
 
       if (isResetPassword) {
         forgotPasswordHandler();
-        return
+        return;
       }
 
       setRegisteredEmailModal();
